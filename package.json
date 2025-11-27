@@ -1,6 +1,6 @@
 {
   "name": "w-utils-set",
-  "version": "1.0.2",
+  "version": "1.0.8",
   "main": "./dist-lib/index.umd.js",
   "module": "./dist-lib/index.es.js",
   "files": [

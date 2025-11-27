@@ -1,12 +1,12 @@
-// 导入mux.js库
-
+// 在Worker内部直接加载mux.js库
+import muxjs from 'mux.js';
 
 self.onmessage = function(e) {
-  const { data, index, durationSecond ,mp4} = e.data;
+  const { data, index, durationSecond } = e.data;
   
   try {
     // 创建Transmuxer实例
-    const transmuxer = new mp4.Transmuxer({
+    const transmuxer = new muxjs.mp4.Transmuxer({
       keepOriginalTimestamps: true,
       duration: parseInt(durationSecond),
     });
@@ -14,13 +14,21 @@ self.onmessage = function(e) {
     transmuxer.on('data', segment => {
       if (index === 0) {
         // 第一个片段需要合并initSegment和data
-        const combinedData = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
-        combinedData.set(segment.initSegment, 0);
-        combinedData.set(segment.data, segment.initSegment.byteLength);
-        self.postMessage({ success: true, index, result: combinedData.buffer });
+        if (segment.initSegment && segment.data) {
+          const combinedData = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
+          combinedData.set(segment.initSegment, 0);
+          combinedData.set(segment.data, segment.initSegment.byteLength);
+          self.postMessage({ success: true, index, result: combinedData.buffer }, [combinedData.buffer]);
+        } else {
+          self.postMessage({ success: false, index, error: '缺少initSegment或data' });
+        }
       } else {
         // 后续片段只需要data
-        self.postMessage({ success: true, index, result: segment.data });
+        if (segment.data) {
+          self.postMessage({ success: true, index, result: segment.data }, [segment.data]);
+        } else {
+          self.postMessage({ success: false, index, error: '缺少data' });
+        }
       }
     });
     

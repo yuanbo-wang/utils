@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     // 库模式下禁用public目录
-    publicDir: process.env.BUILD_MODE !== "lib",
+    // publicDir: process.env.BUILD_MODE !== "lib",
     build: {
       // outDir: "dist",
       outDir: process.env.BUILD_MODE === "lib" ? "dist-lib" : "dist",

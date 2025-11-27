@@ -1,5 +1,5 @@
 
-import muxjs from 'mux.js';
+import  innerMuxjs from 'mux.js';
 
 /**
  * 主要的下载函数
@@ -207,51 +207,51 @@ export async function downloadM3U8(m3u8Url, options = {}) {
     }
 
     // 转换为MP4
-  function conversionMp4(data, index) {
-    return new Promise((resolve, reject) => {
+  // 转换任务队列
+  let conversionQueue = [];
+  let isProcessingQueue = false;
+  
+  // 处理转换任务队列
+  function processConversionQueue() {
+    if (isProcessingQueue || conversionQueue.length === 0) {
+      return;
+    }
+    
+    isProcessingQueue = true;
+    
+    // 使用requestIdleCallback在浏览器空闲时执行转换任务
+    const processNext = () => {
+      if (conversionQueue.length === 0) {
+        isProcessingQueue = false;
+        return;
+      }
+      
+      const { data, index, resolve, reject } = conversionQueue.shift();
+      
       try {
-        // 使用Web Worker异步执行转换，避免阻塞主线程
-        const worker = new Worker(new URL('./transmuxer-worker.js', import.meta.url));
-        
-        worker.onmessage = function(e) {
-          if (e.data.success) {
-            resolve(e.data.result);
-          } else {
-            reject(new Error(e.data.error || '转换失败'));
-          }
-          // 转换完成后终止Worker，释放资源
-          worker.terminate();
-        };
-        
-        worker.onerror = function(error) {
-          console.error('Worker执行错误:', error);
-          reject(new Error('转换Worker执行失败'));
-          worker.terminate();
-        };
-        
-        // 向Worker发送数据，执行转换
-        worker.postMessage({ 
-          data: data, 
-          mp4,
-          index: index, 
-          durationSecond: durationSecond 
-        }, [data]); // 转移data的所有权，优化内存使用
-      } catch (error) {
-        console.error('创建Worker失败:', error);
-        // 降级处理：如果Worker创建失败，使用主线程转换
-        const transmuxer = new muxjs.mp4.Transmuxer({
+        const transmuxer = new innerMuxjs.mp4.Transmuxer({
           keepOriginalTimestamps: true,
           duration: parseInt(durationSecond),
         });
         
         transmuxer.on('data', segment => {
           if (index === 0) {
-            const combinedData = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
-            combinedData.set(segment.initSegment, 0);
-            combinedData.set(segment.data, segment.initSegment.byteLength);
-            resolve(combinedData.buffer);
+            // 第一个片段需要合并initSegment和data
+            if (segment.initSegment && segment.data) {
+              const combinedData = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
+              combinedData.set(segment.initSegment, 0);
+              combinedData.set(segment.data, segment.initSegment.byteLength);
+              resolve(combinedData.buffer);
+            } else {
+              reject(new Error('缺少initSegment或data'));
+            }
           } else {
-            resolve(segment.data);
+            // 后续片段只需要data
+            if (segment.data) {
+              resolve(segment.data);
+            } else {
+              reject(new Error('缺少data'));
+            }
           }
         });
         
@@ -261,7 +261,42 @@ export async function downloadM3U8(m3u8Url, options = {}) {
         
         transmuxer.push(new Uint8Array(data));
         transmuxer.flush();
+        
+        // 继续处理下一个任务
+        if (typeof requestIdleCallback !== 'undefined') {
+          requestIdleCallback(processNext);
+        } else {
+          // 浏览器不支持requestIdleCallback时，使用setTimeout
+          setTimeout(processNext, 0);
+        }
+      } catch (error) {
+        console.error('转换失败:', error);
+        reject(new Error('转换失败: ' + error.message));
+        
+        // 继续处理下一个任务
+        if (typeof requestIdleCallback !== 'undefined') {
+          requestIdleCallback(processNext);
+        } else {
+          setTimeout(processNext, 0);
+        }
       }
+    };
+    
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(processNext);
+    } else {
+      // 浏览器不支持requestIdleCallback时，使用setTimeout
+      setTimeout(processNext, 0);
+    }
+  }
+  
+  function conversionMp4(data, index) {
+    return new Promise((resolve, reject) => {
+      // 将转换任务添加到队列中
+      conversionQueue.push({ data, index, resolve, reject });
+      
+      // 开始处理队列
+      processConversionQueue();
     });
   }
 
