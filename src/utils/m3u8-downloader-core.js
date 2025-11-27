@@ -208,26 +208,60 @@ export async function downloadM3U8(m3u8Url, options = {}) {
 
     // 转换为MP4
   function conversionMp4(data, index) {
-    return new Promise((resolve) => {
-      // 从mux.js的mp4模块中获取Transmuxer
-      const transmuxer = new muxjs.mp4.Transmuxer({
-        keepOriginalTimestamps: true,
-        duration: parseInt(durationSecond),
-      });
-      
-      transmuxer.on('data', segment => {
-        if (index === 0) {
-          const combinedData = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
-          combinedData.set(segment.initSegment, 0);
-          combinedData.set(segment.data, segment.initSegment.byteLength);
-          resolve(combinedData.buffer);
-        } else {
-          resolve(segment.data);
-        }
-      });
-      
-      transmuxer.push(new Uint8Array(data));
-      transmuxer.flush();
+    return new Promise((resolve, reject) => {
+      try {
+        // 使用Web Worker异步执行转换，避免阻塞主线程
+        const worker = new Worker(new URL('./transmuxer-worker.js', import.meta.url));
+        
+        worker.onmessage = function(e) {
+          if (e.data.success) {
+            resolve(e.data.result);
+          } else {
+            reject(new Error(e.data.error || '转换失败'));
+          }
+          // 转换完成后终止Worker，释放资源
+          worker.terminate();
+        };
+        
+        worker.onerror = function(error) {
+          console.error('Worker执行错误:', error);
+          reject(new Error('转换Worker执行失败'));
+          worker.terminate();
+        };
+        
+        // 向Worker发送数据，执行转换
+        worker.postMessage({ 
+          data: data, 
+          mp4,
+          index: index, 
+          durationSecond: durationSecond 
+        }, [data]); // 转移data的所有权，优化内存使用
+      } catch (error) {
+        console.error('创建Worker失败:', error);
+        // 降级处理：如果Worker创建失败，使用主线程转换
+        const transmuxer = new muxjs.mp4.Transmuxer({
+          keepOriginalTimestamps: true,
+          duration: parseInt(durationSecond),
+        });
+        
+        transmuxer.on('data', segment => {
+          if (index === 0) {
+            const combinedData = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
+            combinedData.set(segment.initSegment, 0);
+            combinedData.set(segment.data, segment.initSegment.byteLength);
+            resolve(combinedData.buffer);
+          } else {
+            resolve(segment.data);
+          }
+        });
+        
+        transmuxer.on('error', error => {
+          reject(error);
+        });
+        
+        transmuxer.push(new Uint8Array(data));
+        transmuxer.flush();
+      }
     });
   }
 

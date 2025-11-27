@@ -2,7 +2,7 @@ var Ht = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
 function Er(s) {
   return s && s.__esModule && Object.prototype.hasOwnProperty.call(s, "default") ? s.default : s;
 }
-var te = function() {
+var ie = function() {
   this.init = function() {
     var e = {};
     this.on = function(t, i) {
@@ -27,7 +27,7 @@ var te = function() {
     };
   };
 };
-te.prototype.pipe = function(s) {
+ie.prototype.pipe = function(s) {
   return this.on("data", function(e) {
     s.push(e);
   }), this.on("done", function(e) {
@@ -40,56 +40,56 @@ te.prototype.pipe = function(s) {
     s.reset(e);
   }), s;
 };
-te.prototype.push = function(s) {
+ie.prototype.push = function(s) {
   this.trigger("data", s);
 };
-te.prototype.flush = function(s) {
+ie.prototype.flush = function(s) {
   this.trigger("done", s);
 };
-te.prototype.partialFlush = function(s) {
+ie.prototype.partialFlush = function(s) {
   this.trigger("partialdone", s);
 };
-te.prototype.endTimeline = function(s) {
+ie.prototype.endTimeline = function(s) {
   this.trigger("endedtimeline", s);
 };
-te.prototype.reset = function(s) {
+ie.prototype.reset = function(s) {
   this.trigger("reset", s);
 };
-var M = te, Dt = 9e4, Ut, Pt, Ye, Ct, pi, mi, ci;
-Ut = function(e) {
-  return e * Dt;
-};
-Pt = function(e, t) {
-  return e * t;
-};
-Ye = function(e) {
-  return e / Dt;
+var M = ie, Ut = 9e4, Pt, Ct, qe, It, pi, mi, ci;
+Pt = function(e) {
+  return e * Ut;
 };
 Ct = function(e, t) {
+  return e * t;
+};
+qe = function(e) {
+  return e / Ut;
+};
+It = function(e, t) {
   return e / t;
 };
 pi = function(e, t) {
-  return Ut(Ct(e, t));
+  return Pt(It(e, t));
 };
 mi = function(e, t) {
-  return Pt(Ye(e), t);
+  return Ct(qe(e), t);
 };
 ci = function(e, t, i) {
-  return Ye(i ? e : e - t);
+  return qe(i ? e : e - t);
 };
-var j = {
-  ONE_SECOND_IN_TS: Dt,
-  secondsToVideoTs: Ut,
-  secondsToAudioTs: Pt,
-  videoTsToSeconds: Ye,
-  audioTsToSeconds: Ct,
+var J = {
+  ONE_SECOND_IN_TS: Ut,
+  secondsToVideoTs: Pt,
+  secondsToAudioTs: Ct,
+  videoTsToSeconds: qe,
+  audioTsToSeconds: It,
   audioTsToVideoTs: pi,
   videoTsToAudioTs: mi,
   metadataTsToSeconds: ci
-}, Or = M, Lr = j.ONE_SECOND_IN_TS, Le, Yt = [96e3, 88200, 64e3, 48e3, 44100, 32e3, 24e3, 22050, 16e3, 12e3, 11025, 8e3, 7350];
-Le = function(e) {
+}, Or = M, Lr = J.ONE_SECOND_IN_TS, Me, Yt = [96e3, 88200, 64e3, 48e3, 44100, 32e3, 24e3, 22050, 16e3, 12e3, 11025, 8e3, 7350];
+Me = function(e) {
   var t, i = 0;
-  Le.prototype.init.call(this), this.skipWarn_ = function(r, n) {
+  Me.prototype.init.call(this), this.skipWarn_ = function(r, n) {
     this.trigger("log", {
       level: "warn",
       message: "adts skiping bytes " + r + " to " + n + " in frame " + i + " outside syncword"
@@ -129,8 +129,8 @@ Le = function(e) {
     t = void 0, this.trigger("endedtimeline");
   };
 };
-Le.prototype = new Or();
-var qe = Le, gi;
+Me.prototype = new Or();
+var Xe = Me, gi;
 gi = function(e) {
   var t = e.byteLength, i = 0, r = 0;
   this.length = function() {
@@ -170,10 +170,10 @@ gi = function(e) {
     return this.readBits(8);
   }, this.loadWord();
 };
-var Mr = gi, xi = M, Rr = Mr, Me, ye, yi;
-ye = function() {
+var Mr = gi, xi = M, Rr = Mr, Re, ve, yi;
+ve = function() {
   var e = 0, t, i;
-  ye.prototype.init.call(this), this.push = function(r) {
+  ve.prototype.init.call(this), this.push = function(r) {
     var n;
     i ? (n = new Uint8Array(i.byteLength + r.data.byteLength), n.set(i), n.set(r.data, i.byteLength), i = n) : i = r.data;
     for (var a = i.byteLength; e < a - 3; e++)
@@ -217,7 +217,7 @@ ye = function() {
     this.flush(), this.trigger("endedtimeline");
   };
 };
-ye.prototype = new xi();
+ve.prototype = new xi();
 yi = {
   100: !0,
   110: !0,
@@ -234,9 +234,9 @@ yi = {
   139: !0,
   134: !0
 };
-Me = function() {
-  var e = new ye(), t, i, r, n, a, o, u;
-  Me.prototype.init.call(this), t = this, this.push = function(f) {
+Re = function() {
+  var e = new ve(), t, i, r, n, a, o, u;
+  Re.prototype.init.call(this), t = this, this.push = function(f) {
     f.type === "video" && (i = f.trackId, r = f.pts, n = f.dts, e.push(f));
   }, e.on("data", function(f) {
     var l = {
@@ -295,97 +295,97 @@ Me = function() {
       g === h[0] && (g++, h.shift()), c[m] = l[g];
     return c;
   }, o = function(l) {
-    var d = 0, h = 0, m = 0, p = 0, c, g, T, F, z, oe, D, v, U, L, E, A = [1, 1], Wt, Z;
-    if (c = new Rr(l), g = c.readUnsignedByte(), F = c.readUnsignedByte(), T = c.readUnsignedByte(), c.skipUnsignedExpGolomb(), yi[g] && (z = c.readUnsignedExpGolomb(), z === 3 && c.skipBits(1), c.skipUnsignedExpGolomb(), c.skipUnsignedExpGolomb(), c.skipBits(1), c.readBoolean()))
-      for (E = z !== 3 ? 8 : 12, Z = 0; Z < E; Z++)
-        c.readBoolean() && (Z < 6 ? u(16, c) : u(64, c));
-    if (c.skipUnsignedExpGolomb(), oe = c.readUnsignedExpGolomb(), oe === 0)
+    var d = 0, h = 0, m = 0, p = 0, c, g, b, D, W, ue, F, v, U, L, I, S = [1, 1], B, V;
+    if (c = new Rr(l), g = c.readUnsignedByte(), D = c.readUnsignedByte(), b = c.readUnsignedByte(), c.skipUnsignedExpGolomb(), yi[g] && (W = c.readUnsignedExpGolomb(), W === 3 && c.skipBits(1), c.skipUnsignedExpGolomb(), c.skipUnsignedExpGolomb(), c.skipBits(1), c.readBoolean()))
+      for (I = W !== 3 ? 8 : 12, V = 0; V < I; V++)
+        c.readBoolean() && (V < 6 ? u(16, c) : u(64, c));
+    if (c.skipUnsignedExpGolomb(), ue = c.readUnsignedExpGolomb(), ue === 0)
       c.readUnsignedExpGolomb();
-    else if (oe === 1)
-      for (c.skipBits(1), c.skipExpGolomb(), c.skipExpGolomb(), D = c.readUnsignedExpGolomb(), Z = 0; Z < D; Z++)
+    else if (ue === 1)
+      for (c.skipBits(1), c.skipExpGolomb(), c.skipExpGolomb(), F = c.readUnsignedExpGolomb(), V = 0; V < F; V++)
         c.skipExpGolomb();
     if (c.skipUnsignedExpGolomb(), c.skipBits(1), v = c.readUnsignedExpGolomb(), U = c.readUnsignedExpGolomb(), L = c.readBits(1), L === 0 && c.skipBits(1), c.skipBits(1), c.readBoolean() && (d = c.readUnsignedExpGolomb(), h = c.readUnsignedExpGolomb(), m = c.readUnsignedExpGolomb(), p = c.readUnsignedExpGolomb()), c.readBoolean() && c.readBoolean()) {
-      switch (Wt = c.readUnsignedByte(), Wt) {
+      switch (B = c.readUnsignedByte(), B) {
         case 1:
-          A = [1, 1];
+          S = [1, 1];
           break;
         case 2:
-          A = [12, 11];
+          S = [12, 11];
           break;
         case 3:
-          A = [10, 11];
+          S = [10, 11];
           break;
         case 4:
-          A = [16, 11];
+          S = [16, 11];
           break;
         case 5:
-          A = [40, 33];
+          S = [40, 33];
           break;
         case 6:
-          A = [24, 11];
+          S = [24, 11];
           break;
         case 7:
-          A = [20, 11];
+          S = [20, 11];
           break;
         case 8:
-          A = [32, 11];
+          S = [32, 11];
           break;
         case 9:
-          A = [80, 33];
+          S = [80, 33];
           break;
         case 10:
-          A = [18, 11];
+          S = [18, 11];
           break;
         case 11:
-          A = [15, 11];
+          S = [15, 11];
           break;
         case 12:
-          A = [64, 33];
+          S = [64, 33];
           break;
         case 13:
-          A = [160, 99];
+          S = [160, 99];
           break;
         case 14:
-          A = [4, 3];
+          S = [4, 3];
           break;
         case 15:
-          A = [3, 2];
+          S = [3, 2];
           break;
         case 16:
-          A = [2, 1];
+          S = [2, 1];
           break;
         case 255: {
-          A = [c.readUnsignedByte() << 8 | c.readUnsignedByte(), c.readUnsignedByte() << 8 | c.readUnsignedByte()];
+          S = [c.readUnsignedByte() << 8 | c.readUnsignedByte(), c.readUnsignedByte() << 8 | c.readUnsignedByte()];
           break;
         }
       }
-      A && A[0] / A[1];
+      S && S[0] / S[1];
     }
     return {
       profileIdc: g,
-      levelIdc: T,
-      profileCompatibility: F,
+      levelIdc: b,
+      profileCompatibility: D,
       width: (v + 1) * 16 - d * 2 - h * 2,
       height: (2 - L) * (U + 1) * 16 - m * 2 - p * 2,
       // sar is sample aspect ratio
-      sarRatio: A
+      sarRatio: S
     };
   };
 };
-Me.prototype = new xi();
-var It = {
-  H264Stream: Me,
-  NalByteStream: ye
+Re.prototype = new xi();
+var Et = {
+  H264Stream: Re,
+  NalByteStream: ve
 }, vi = {
-  Adts: qe,
-  h264: It
+  Adts: Xe,
+  h264: Et
 }, Si = Math.pow(2, 32), Nr = function(e) {
   var t = new DataView(e.buffer, e.byteOffset, e.byteLength), i;
   return t.getBigUint64 ? (i = t.getBigUint64(0), i < Number.MAX_SAFE_INTEGER ? Number(i) : i) : t.getUint32(0) * Si + t.getUint32(4);
-}, se = {
+}, oe = {
   getUint64: Nr,
   MAX_UINT32: Si
-}, qt = se.MAX_UINT32, y, Ti, bi, yt, wi, _i, Fi, Ai, vt, Di, Ui, Pi, Ci, Ii, Ei, Oi, Li, Mi, Ri, Ni, ki, St, x, Tt, Bi, Vi, Xt, Kt, $i, zi, Gi, Wi, Ee, Hi, Yi, qi;
+}, qt = oe.MAX_UINT32, y, Ti, bi, vt, wi, _i, Fi, Ai, St, Di, Ui, Pi, Ci, Ii, Ei, Oi, Li, Mi, Ri, Ni, ki, Tt, x, bt, Bi, Vi, Xt, Kt, $i, zi, Gi, Wi, Oe, Hi, Yi, qi;
 (function() {
   var s;
   if (x = {
@@ -430,7 +430,7 @@ var It = {
   }, !(typeof Uint8Array > "u")) {
     for (s in x)
       x.hasOwnProperty(s) && (x[s] = [s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2), s.charCodeAt(3)]);
-    Tt = new Uint8Array([105, 115, 111, 109]), Vi = new Uint8Array([97, 118, 99, 49]), Bi = new Uint8Array([0, 0, 0, 1]), Xt = new Uint8Array([
+    bt = new Uint8Array([105, 115, 111, 109]), Vi = new Uint8Array([97, 118, 99, 49]), Bi = new Uint8Array([0, 0, 0, 1]), Xt = new Uint8Array([
       0,
       // version 0
       0,
@@ -566,7 +566,7 @@ var It = {
       0,
       0
       // reserved
-    ]), Ee = new Uint8Array([
+    ]), Oe = new Uint8Array([
       0,
       // version
       0,
@@ -578,7 +578,7 @@ var It = {
       0,
       0
       // entry_count
-    ]), Hi = Ee, Yi = new Uint8Array([
+    ]), Hi = Oe, Yi = new Uint8Array([
       0,
       // version
       0,
@@ -595,7 +595,7 @@ var It = {
       0,
       0
       // sample_count
-    ]), qi = Ee, zi = new Uint8Array([
+    ]), qi = Oe, zi = new Uint8Array([
       0,
       // version
       0,
@@ -684,8 +684,8 @@ bi = function(e) {
     // GASpecificConfig
   ]));
 };
-yt = function() {
-  return y(x.ftyp, Tt, Bi, Tt, Vi);
+vt = function() {
+  return y(x.ftyp, bt, Bi, bt, Vi);
 };
 Oi = function(e) {
   return y(x.hdlr, $i[e]);
@@ -754,7 +754,7 @@ Ai = function(e, t) {
     i[r] = Ni(t[r]);
   return y.apply(null, [x.moof, _i(e)].concat(i));
 };
-vt = function(e) {
+St = function(e) {
   for (var t = e.length, i = []; t--; )
     i[t] = Pi(e[t]);
   return y.apply(null, [x.moov, Ui(4294967295)].concat(i).concat(Di(e)));
@@ -890,7 +890,7 @@ Li = function(e) {
   return y(x.sdtp, i);
 };
 Mi = function(e) {
-  return y(x.stbl, Ri(e), y(x.stts, qi), y(x.stsc, Hi), y(x.stsz, Yi), y(x.stco, Ee));
+  return y(x.stbl, Ri(e), y(x.stts, qi), y(x.stsc, Hi), y(x.stsz, Yi), y(x.stco, Oe));
 };
 (function() {
   var s, e;
@@ -1246,7 +1246,7 @@ Ni = function(e) {
     u >>> 16 & 255,
     u >>> 8 & 255,
     u & 255
-  ])), a = 92, e.type === "audio" ? (r = St(e, a), y(x.traf, t, i, r)) : (n = Li(e), r = St(e, n.length + a), y(x.traf, t, i, r, n));
+  ])), a = 92, e.type === "audio" ? (r = Tt(e, a), y(x.traf, t, i, r)) : (n = Li(e), r = Tt(e, n.length + a), y(x.traf, t, i, r, n));
 };
 Pi = function(e) {
   return e.duration = e.duration || 4294967295, y(x.trak, Ci(e), Ii(e));
@@ -1319,51 +1319,51 @@ ki = function(e) {
     for (f = r.samples || [], n += 20 + 8 * f.length, u = t(f, n), a = new Uint8Array(u.length + f.length * 8), a.set(u), o = u.length, d = 0; d < f.length; d++)
       l = f[d], a[o++] = (l.duration & 4278190080) >>> 24, a[o++] = (l.duration & 16711680) >>> 16, a[o++] = (l.duration & 65280) >>> 8, a[o++] = l.duration & 255, a[o++] = (l.size & 4278190080) >>> 24, a[o++] = (l.size & 16711680) >>> 16, a[o++] = (l.size & 65280) >>> 8, a[o++] = l.size & 255;
     return y(x.trun, a);
-  }, St = function(r, n) {
+  }, Tt = function(r, n) {
     return r.type === "audio" ? s(r, n) : e(r, n);
   };
 })();
-var Xe = {
-  ftyp: yt,
+var Ke = {
+  ftyp: vt,
   mdat: wi,
   moof: Ai,
-  moov: vt,
+  moov: St,
   initSegment: function(e) {
-    var t = yt(), i = vt(e), r;
+    var t = vt(), i = St(e), r;
     return r = new Uint8Array(t.byteLength + i.byteLength), r.set(t), r.set(i, t.byteLength), r;
   }
 }, kr = function(e) {
   return e >>> 0;
 }, Br = function(e) {
   return ("00" + e.toString(16)).slice(-2);
-}, Ke = {
+}, je = {
   toUnsigned: kr,
   toHexString: Br
 }, Vr = function(e) {
   var t = "";
   return t += String.fromCharCode(e[0]), t += String.fromCharCode(e[1]), t += String.fromCharCode(e[2]), t += String.fromCharCode(e[3]), t;
-}, Et = Vr, $r = Ke.toUnsigned, zr = Et, Gr = function s(e, t) {
+}, Ot = Vr, $r = je.toUnsigned, zr = Ot, Gr = function s(e, t) {
   var i = [], r, n, a, o, u;
   if (!t.length)
     return null;
   for (r = 0; r < e.byteLength; )
     n = $r(e[r] << 24 | e[r + 1] << 16 | e[r + 2] << 8 | e[r + 3]), a = zr(e.subarray(r + 4, r + 8)), o = n > 1 ? r + n : e.byteLength, a === t[0] && (t.length === 1 ? i.push(e.subarray(r + 8, o)) : (u = s(e.subarray(r + 8, o), t.slice(1)), u.length && (i = i.concat(u)))), r = o;
   return i;
-}, Ot = Gr, Wr = function(e) {
+}, Lt = Gr, Wr = function(e) {
   for (var t = 0, i = String.fromCharCode(e[t]), r = ""; i !== "\0"; )
     r += i, t++, i = String.fromCharCode(e[t]);
   return r += i, r;
 }, Hr = {
   uint8ToCString: Wr
-}, be = Hr.uint8ToCString, Yr = se.getUint64, qr = function(e) {
+}, we = Hr.uint8ToCString, Yr = oe.getUint64, qr = function(e) {
   var t = 4, i = e[0], r, n, a, o, u, f, l, d;
   if (i === 0) {
-    r = be(e.subarray(t)), t += r.length, n = be(e.subarray(t)), t += n.length;
+    r = we(e.subarray(t)), t += r.length, n = we(e.subarray(t)), t += n.length;
     var h = new DataView(e.buffer);
     a = h.getUint32(t), t += 4, u = h.getUint32(t), t += 4, f = h.getUint32(t), t += 4, l = h.getUint32(t), t += 4;
   } else if (i === 1) {
     var h = new DataView(e.buffer);
-    a = h.getUint32(t), t += 4, o = Yr(e.subarray(t)), t += 8, f = h.getUint32(t), t += 4, l = h.getUint32(t), t += 4, r = be(e.subarray(t)), t += r.length, n = be(e.subarray(t)), t += n.length;
+    a = h.getUint32(t), t += 4, o = Yr(e.subarray(t)), t += 8, f = h.getUint32(t), t += 4, l = h.getUint32(t), t += 4, r = we(e.subarray(t)), t += r.length, n = we(e.subarray(t)), t += n.length;
   }
   d = new Uint8Array(e.subarray(t, e.byteLength));
   var m = {
@@ -1395,7 +1395,7 @@ var Xe = {
     trackId: t.getUint32(4)
   }, r = i.flags[2] & 1, n = i.flags[2] & 2, a = i.flags[2] & 8, o = i.flags[2] & 16, u = i.flags[2] & 32, f = i.flags[0] & 65536, l = i.flags[0] & 131072, d;
   return d = 8, r && (d += 4, i.baseDataOffset = t.getUint32(12), d += 4), n && (i.sampleDescriptionIndex = t.getUint32(d), d += 4), a && (i.defaultSampleDuration = t.getUint32(d), d += 4), o && (i.defaultSampleSize = t.getUint32(d), d += 4), u && (i.defaultSampleFlags = t.getUint32(d)), f && (i.durationIsEmpty = !0), !r && l && (i.baseDataOffsetIsMoof = !0), i;
-}, Lt = Zr, Jr = function(e) {
+}, Mt = Zr, Jr = function(e) {
   return {
     isLeading: (e[0] & 12) >>> 2,
     dependsOn: e[0] & 3,
@@ -1416,15 +1416,15 @@ var Xe = {
   }, d += 4, a && (h.duration = i.getUint32(d), d += 4), o && (h.size = i.getUint32(d), d += 4), f && (t.version === 1 ? h.compositionTimeOffset = i.getInt32(d) : h.compositionTimeOffset = i.getUint32(d), d += 4), t.samples.push(h), l--); l--; )
     h = {}, a && (h.duration = i.getUint32(d), d += 4), o && (h.size = i.getUint32(d), d += 4), u && (h.flags = Zt(e.subarray(d, d + 4)), d += 4), f && (t.version === 1 ? h.compositionTimeOffset = i.getInt32(d) : h.compositionTimeOffset = i.getUint32(d), d += 4), t.samples.push(h);
   return t;
-}, Mt = en, tn = Ke.toUnsigned, rn = se.getUint64, nn = function(e) {
+}, Rt = en, tn = je.toUnsigned, rn = oe.getUint64, nn = function(e) {
   var t = {
     version: e[0],
     flags: new Uint8Array(e.subarray(1, 4))
   };
   return t.version === 1 ? t.baseMediaDecodeTime = rn(e.subarray(4)) : t.baseMediaDecodeTime = tn(e[4] << 24 | e[5] << 16 | e[6] << 8 | e[7]), t;
-}, Rt = nn, me;
-typeof window < "u" ? me = window : typeof Ht < "u" ? me = Ht : typeof self < "u" ? me = self : me = {};
-var Xi = me, an = function(e, t, i) {
+}, Nt = nn, ce;
+typeof window < "u" ? ce = window : typeof Ht < "u" ? ce = Ht : typeof self < "u" ? ce = self : ce = {};
+var Xi = ce, an = function(e, t, i) {
   if (!e)
     return -1;
   for (var r = i; r < e.length; r++)
@@ -1433,7 +1433,7 @@ var Xi = me, an = function(e, t, i) {
   return -1;
 }, sn = {
   typedArrayIndexOf: an
-}, we = sn.typedArrayIndexOf, _e = {
+}, _e = sn.typedArrayIndexOf, Fe = {
   // UTF-16BE encoded Unicode, without BOM, terminated with \0\0
   Utf8: 3
   // UTF-8 encoded Unicode, terminated with \0
@@ -1442,36 +1442,36 @@ var Xi = me, an = function(e, t, i) {
   for (r = t; r < i; r++)
     n += "%" + ("00" + e[r].toString(16)).slice(-2);
   return n;
-}, ue = function(e, t, i) {
-  return decodeURIComponent(Ki(e, t, i));
 }, le = function(e, t, i) {
+  return decodeURIComponent(Ki(e, t, i));
+}, fe = function(e, t, i) {
   return unescape(Ki(e, t, i));
-}, ce = function(e) {
+}, ge = function(e) {
   return e[0] << 21 | e[1] << 14 | e[2] << 7 | e[3];
-}, ge = {
+}, xe = {
   APIC: function(e) {
     var t = 1, i, r, n = "-->";
-    e.data[0] === _e.Utf8 && (i = we(e.data, 0, t), !(i < 0) && (e.mimeType = le(e.data, t, i), t = i + 1, e.pictureType = e.data[t], t++, r = we(e.data, 0, t), !(r < 0) && (e.description = ue(e.data, t, r), t = r + 1, e.mimeType === n ? e.url = le(e.data, t, e.data.length) : e.pictureData = e.data.subarray(t, e.data.length))));
+    e.data[0] === Fe.Utf8 && (i = _e(e.data, 0, t), !(i < 0) && (e.mimeType = fe(e.data, t, i), t = i + 1, e.pictureType = e.data[t], t++, r = _e(e.data, 0, t), !(r < 0) && (e.description = le(e.data, t, r), t = r + 1, e.mimeType === n ? e.url = fe(e.data, t, e.data.length) : e.pictureData = e.data.subarray(t, e.data.length))));
   },
   "T*": function(e) {
-    e.data[0] === _e.Utf8 && (e.value = ue(e.data, 1, e.data.length).replace(/\0*$/, ""), e.values = e.value.split("\0"));
+    e.data[0] === Fe.Utf8 && (e.value = le(e.data, 1, e.data.length).replace(/\0*$/, ""), e.values = e.value.split("\0"));
   },
   TXXX: function(e) {
     var t;
-    e.data[0] === _e.Utf8 && (t = we(e.data, 0, 1), t !== -1 && (e.description = ue(e.data, 1, t), e.value = ue(e.data, t + 1, e.data.length).replace(/\0*$/, ""), e.data = e.value));
+    e.data[0] === Fe.Utf8 && (t = _e(e.data, 0, 1), t !== -1 && (e.description = le(e.data, 1, t), e.value = le(e.data, t + 1, e.data.length).replace(/\0*$/, ""), e.data = e.value));
   },
   "W*": function(e) {
-    e.url = le(e.data, 0, e.data.length).replace(/\0.*$/, "");
+    e.url = fe(e.data, 0, e.data.length).replace(/\0.*$/, "");
   },
   WXXX: function(e) {
     var t;
-    e.data[0] === _e.Utf8 && (t = we(e.data, 0, 1), t !== -1 && (e.description = ue(e.data, 1, t), e.url = le(e.data, t + 1, e.data.length).replace(/\0.*$/, "")));
+    e.data[0] === Fe.Utf8 && (t = _e(e.data, 0, 1), t !== -1 && (e.description = le(e.data, 1, t), e.url = fe(e.data, t + 1, e.data.length).replace(/\0.*$/, "")));
   },
   PRIV: function(e) {
     var t;
     for (t = 0; t < e.data.length; t++)
       if (e.data[t] === 0) {
-        e.owner = le(e.data, 0, t);
+        e.owner = fe(e.data, 0, t);
         break;
       }
     e.privateData = e.data.subarray(t + 1), e.data = e.privateData;
@@ -1479,41 +1479,41 @@ var Xi = me, an = function(e, t, i) {
 }, on = function(e) {
   var t, i, r = 10, n = 0, a = [];
   if (!(e.length < 10 || e[0] !== 73 || e[1] !== 68 || e[2] !== 51)) {
-    n = ce(e.subarray(6, 10)), n += 10;
+    n = ge(e.subarray(6, 10)), n += 10;
     var o = e[5] & 64;
-    o && (r += 4, r += ce(e.subarray(10, 14)), n -= ce(e.subarray(16, 20)));
+    o && (r += 4, r += ge(e.subarray(10, 14)), n -= ge(e.subarray(16, 20)));
     do {
-      if (t = ce(e.subarray(r + 4, r + 8)), t < 1)
+      if (t = ge(e.subarray(r + 4, r + 8)), t < 1)
         break;
       i = String.fromCharCode(e[r], e[r + 1], e[r + 2], e[r + 3]);
       var u = {
         id: i,
         data: e.subarray(r + 10, r + t + 10)
       };
-      u.key = u.id, ge[u.id] ? ge[u.id](u) : u.id[0] === "T" ? ge["T*"](u) : u.id[0] === "W" && ge["W*"](u), a.push(u), r += 10, r += t;
+      u.key = u.id, xe[u.id] ? xe[u.id](u) : u.id[0] === "T" ? xe["T*"](u) : u.id[0] === "W" && xe["W*"](u), a.push(u), r += 10, r += t;
     } while (r < n);
     return a;
   }
 }, ji = {
   parseId3Frames: on,
-  parseSyncSafeInteger: ce,
-  frameParsers: ge
-}, Re = Ke.toUnsigned, fe = Ke.toHexString, C = Ot, ne = Et, st = jr, un = Lt, ln = Mt, fn = Rt, dn = se.getUint64, Zi, Ji, Qi, er, tr, Nt, ir, bt = Xi, hn = ji.parseId3Frames;
+  parseSyncSafeInteger: ge,
+  frameParsers: xe
+}, Ne = je.toUnsigned, de = je.toHexString, C = Lt, ae = Ot, ot = jr, un = Mt, ln = Rt, fn = Nt, dn = oe.getUint64, Zi, Ji, Qi, er, tr, kt, ir, wt = Xi, hn = ji.parseId3Frames;
 Zi = function(e) {
   var t = {}, i = C(e, ["moov", "trak"]);
   return i.reduce(function(r, n) {
     var a, o, u, f, l;
-    return a = C(n, ["tkhd"])[0], !a || (o = a[0], u = o === 0 ? 12 : 20, f = Re(a[u] << 24 | a[u + 1] << 16 | a[u + 2] << 8 | a[u + 3]), l = C(n, ["mdia", "mdhd"])[0], !l) ? null : (o = l[0], u = o === 0 ? 12 : 20, r[f] = Re(l[u] << 24 | l[u + 1] << 16 | l[u + 2] << 8 | l[u + 3]), r);
+    return a = C(n, ["tkhd"])[0], !a || (o = a[0], u = o === 0 ? 12 : 20, f = Ne(a[u] << 24 | a[u + 1] << 16 | a[u + 2] << 8 | a[u + 3]), l = C(n, ["mdia", "mdhd"])[0], !l) ? null : (o = l[0], u = o === 0 ? 12 : 20, r[f] = Ne(l[u] << 24 | l[u + 1] << 16 | l[u + 2] << 8 | l[u + 3]), r);
   }, t);
 };
 Ji = function(e, t) {
   var i;
   i = C(t, ["moof", "traf"]);
   var r = i.reduce(function(n, a) {
-    var o = C(a, ["tfhd"])[0], u = Re(o[4] << 24 | o[5] << 16 | o[6] << 8 | o[7]), f = e[u] || 9e4, l = C(a, ["tfdt"])[0], d = new DataView(l.buffer, l.byteOffset, l.byteLength), h;
+    var o = C(a, ["tfhd"])[0], u = Ne(o[4] << 24 | o[5] << 16 | o[6] << 8 | o[7]), f = e[u] || 9e4, l = C(a, ["tfdt"])[0], d = new DataView(l.buffer, l.byteOffset, l.byteLength), h;
     l[0] === 1 ? h = dn(l.subarray(4, 12)) : h = d.getUint32(4);
     var m;
-    return typeof h == "bigint" ? m = h / bt.BigInt(f) : typeof h == "number" && !isNaN(h) && (m = h / f), m < Number.MAX_SAFE_INTEGER && (m = Number(m)), m < n && (n = m), n;
+    return typeof h == "bigint" ? m = h / wt.BigInt(f) : typeof h == "number" && !isNaN(h) && (m = h / f), m < Number.MAX_SAFE_INTEGER && (m = Number(m)), m < n && (n = m), n;
   }, 1 / 0);
   return typeof r == "bigint" || isFinite(r) ? r : 0;
 };
@@ -1535,7 +1535,7 @@ Qi = function(e, t) {
     }
   }
   var m = e[a] || 9e4;
-  typeof r == "bigint" && (n = bt.BigInt(n), m = bt.BigInt(m));
+  typeof r == "bigint" && (n = wt.BigInt(n), m = wt.BigInt(m));
   var p = (r + n) / m;
   return typeof p == "bigint" && p < Number.MAX_SAFE_INTEGER && (p = Number(p)), p;
 };
@@ -1544,14 +1544,14 @@ er = function(e) {
   return t.forEach(function(r) {
     var n = C(r, ["mdia", "hdlr"]), a = C(r, ["tkhd"]);
     n.forEach(function(o, u) {
-      var f = ne(o.subarray(8, 12)), l = a[u], d, h, m;
+      var f = ae(o.subarray(8, 12)), l = a[u], d, h, m;
       f === "vide" && (d = new DataView(l.buffer, l.byteOffset, l.byteLength), h = d.getUint8(0), m = h === 0 ? d.getUint32(12) : d.getUint32(20), i.push(m));
     });
   }), i;
 };
-Nt = function(e) {
+kt = function(e) {
   var t = e[0], i = t === 0 ? 12 : 20;
-  return Re(e[i] << 24 | e[i + 1] << 16 | e[i + 2] << 8 | e[i + 3]);
+  return Ne(e[i] << 24 | e[i + 1] << 16 | e[i + 2] << 8 | e[i + 3]);
 };
 tr = function(e) {
   var t = C(e, ["moov", "trak"]), i = [];
@@ -1560,28 +1560,28 @@ tr = function(e) {
     a && (o = new DataView(a.buffer, a.byteOffset, a.byteLength), u = o.getUint8(0), n.id = u === 0 ? o.getUint32(12) : o.getUint32(20));
     var f = C(r, ["mdia", "hdlr"])[0];
     if (f) {
-      var l = ne(f.subarray(8, 12));
+      var l = ae(f.subarray(8, 12));
       l === "vide" ? n.type = "video" : l === "soun" ? n.type = "audio" : n.type = l;
     }
     var d = C(r, ["mdia", "minf", "stbl", "stsd"])[0];
     if (d) {
       var h = d.subarray(8);
-      n.codec = ne(h.subarray(4, 8));
+      n.codec = ae(h.subarray(4, 8));
       var m = C(h, [n.codec])[0], p, c;
-      m && (/^[asm]vc[1-9]$/i.test(n.codec) ? (p = m.subarray(78), c = ne(p.subarray(4, 8)), c === "avcC" && p.length > 11 ? (n.codec += ".", n.codec += fe(p[9]), n.codec += fe(p[10]), n.codec += fe(p[11])) : n.codec = "avc1.4d400d") : /^mp4[a,v]$/i.test(n.codec) ? (p = m.subarray(28), c = ne(p.subarray(4, 8)), c === "esds" && p.length > 20 && p[19] !== 0 ? (n.codec += "." + fe(p[19]), n.codec += "." + fe(p[20] >>> 2 & 63).replace(/^0/, "")) : n.codec = "mp4a.40.2") : n.codec = n.codec.toLowerCase());
+      m && (/^[asm]vc[1-9]$/i.test(n.codec) ? (p = m.subarray(78), c = ae(p.subarray(4, 8)), c === "avcC" && p.length > 11 ? (n.codec += ".", n.codec += de(p[9]), n.codec += de(p[10]), n.codec += de(p[11])) : n.codec = "avc1.4d400d") : /^mp4[a,v]$/i.test(n.codec) ? (p = m.subarray(28), c = ae(p.subarray(4, 8)), c === "esds" && p.length > 20 && p[19] !== 0 ? (n.codec += "." + de(p[19]), n.codec += "." + de(p[20] >>> 2 & 63).replace(/^0/, "")) : n.codec = "mp4a.40.2") : n.codec = n.codec.toLowerCase());
     }
     var g = C(r, ["mdia", "mdhd"])[0];
-    g && (n.timescale = Nt(g)), i.push(n);
+    g && (n.timescale = kt(g)), i.push(n);
   }), i;
 };
 ir = function(e, t) {
   t === void 0 && (t = 0);
   var i = C(e, ["emsg"]);
   return i.map(function(r) {
-    var n = st.parseEmsgBox(new Uint8Array(r)), a = hn(n.message_data);
+    var n = ot.parseEmsgBox(new Uint8Array(r)), a = hn(n.message_data);
     return {
-      cueTime: st.scaleTime(n.presentation_time, n.timescale, n.presentation_time_delta, t),
-      duration: st.scaleTime(n.event_duration, n.timescale),
+      cueTime: ot.scaleTime(n.presentation_time, n.timescale, n.presentation_time_delta, t),
+      duration: ot.scaleTime(n.event_duration, n.timescale),
       frames: a
     };
   });
@@ -1589,13 +1589,13 @@ ir = function(e, t) {
 var pn = {
   // export mp4 inspector's findBox and parseType for backwards compatibility
   findBox: C,
-  parseType: ne,
+  parseType: ae,
   timescale: Zi,
   startTime: Ji,
   compositionStartTime: Qi,
   videoTrackIds: er,
   tracks: tr,
-  getTimescaleFromMediaHeader: Nt,
+  getTimescaleFromMediaHeader: kt,
   getEmsgID3: ir
 }, mn = function(e) {
   var t, i, r = [], n = [];
@@ -1654,7 +1654,7 @@ var pn = {
   concatenateNalData: vn,
   generateSampleTableForFrame: Sn,
   concatenateNalDataForFrame: Tn
-}, Y = [33, 16, 5, 32, 164, 27], ot = [33, 65, 108, 84, 1, 2, 4, 8, 168, 2, 4, 8, 17, 191, 252], b = function(e) {
+}, X = [33, 16, 5, 32, 164, 27], ut = [33, 65, 108, 84, 1, 2, 4, 8, 168, 2, 4, 8, 17, 191, 252], w = function(e) {
   for (var t = []; e--; )
     t.push(0);
   return t;
@@ -1664,39 +1664,39 @@ var pn = {
       return r.concat(n);
     }, [])), t;
   }, {});
-}, ut, wn = function() {
-  if (!ut) {
+}, lt, wn = function() {
+  if (!lt) {
     var s = {
-      96e3: [Y, [227, 64], b(154), [56]],
-      88200: [Y, [231], b(170), [56]],
-      64e3: [Y, [248, 192], b(240), [56]],
-      48e3: [Y, [255, 192], b(268), [55, 148, 128], b(54), [112]],
-      44100: [Y, [255, 192], b(268), [55, 163, 128], b(84), [112]],
-      32e3: [Y, [255, 192], b(268), [55, 234], b(226), [112]],
-      24e3: [Y, [255, 192], b(268), [55, 255, 128], b(268), [111, 112], b(126), [224]],
-      16e3: [Y, [255, 192], b(268), [55, 255, 128], b(268), [111, 255], b(269), [223, 108], b(195), [1, 192]],
-      12e3: [ot, b(268), [3, 127, 248], b(268), [6, 255, 240], b(268), [13, 255, 224], b(268), [27, 253, 128], b(259), [56]],
-      11025: [ot, b(268), [3, 127, 248], b(268), [6, 255, 240], b(268), [13, 255, 224], b(268), [27, 255, 192], b(268), [55, 175, 128], b(108), [112]],
-      8e3: [ot, b(268), [3, 121, 16], b(47), [7]]
+      96e3: [X, [227, 64], w(154), [56]],
+      88200: [X, [231], w(170), [56]],
+      64e3: [X, [248, 192], w(240), [56]],
+      48e3: [X, [255, 192], w(268), [55, 148, 128], w(54), [112]],
+      44100: [X, [255, 192], w(268), [55, 163, 128], w(84), [112]],
+      32e3: [X, [255, 192], w(268), [55, 234], w(226), [112]],
+      24e3: [X, [255, 192], w(268), [55, 255, 128], w(268), [111, 112], w(126), [224]],
+      16e3: [X, [255, 192], w(268), [55, 255, 128], w(268), [111, 255], w(269), [223, 108], w(195), [1, 192]],
+      12e3: [ut, w(268), [3, 127, 248], w(268), [6, 255, 240], w(268), [13, 255, 224], w(268), [27, 253, 128], w(259), [56]],
+      11025: [ut, w(268), [3, 127, 248], w(268), [6, 255, 240], w(268), [13, 255, 224], w(268), [27, 255, 192], w(268), [55, 175, 128], w(108), [112]],
+      8e3: [ut, w(268), [3, 121, 16], w(47), [7]]
     };
-    ut = bn(s);
+    lt = bn(s);
   }
-  return ut;
-}, _n = wn, Fe = j, Fn = function(e) {
+  return lt;
+}, _n = wn, Ae = J, Fn = function(e) {
   var t, i, r = 0;
   for (t = 0; t < e.length; t++)
     i = e[t], r += i.data.byteLength;
   return r;
 }, An = function(e, t, i, r) {
   var n, a = 0, o = 0, u = 0, f = 0, l, d, h;
-  if (t.length && (n = Fe.audioTsToVideoTs(e.baseMediaDecodeTime, e.samplerate), a = Math.ceil(Fe.ONE_SECOND_IN_TS / (e.samplerate / 1024)), i && r && (o = n - Math.max(i, r), u = Math.floor(o / a), f = u * a), !(u < 1 || f > Fe.ONE_SECOND_IN_TS / 2))) {
+  if (t.length && (n = Ae.audioTsToVideoTs(e.baseMediaDecodeTime, e.samplerate), a = Math.ceil(Ae.ONE_SECOND_IN_TS / (e.samplerate / 1024)), i && r && (o = n - Math.max(i, r), u = Math.floor(o / a), f = u * a), !(u < 1 || f > Ae.ONE_SECOND_IN_TS / 2))) {
     for (l = _n()[e.samplerate], l || (l = t[0].data), d = 0; d < u; d++)
       h = t[0], t.splice(0, 0, {
         data: l,
         dts: h.dts - a,
         pts: h.pts - a
       });
-    return e.baseMediaDecodeTime -= Math.floor(Fe.videoTsToAudioTs(f, e.samplerate)), f;
+    return e.baseMediaDecodeTime -= Math.floor(Ae.videoTsToAudioTs(f, e.samplerate)), f;
   }
 }, Dn = function(e, t, i) {
   return t.minSegmentDts >= i ? e : (t.minSegmentDts = 1 / 0, e.filter(function(r) {
@@ -1721,14 +1721,14 @@ var pn = {
   trimAdtsFramesByEarliestDts: Dn,
   generateSampleTable: Un,
   concatenateFrameData: Pn
-}, Cn = j.ONE_SECOND_IN_TS, In = function(e, t) {
+}, Cn = J.ONE_SECOND_IN_TS, In = function(e, t) {
   typeof t.pts == "number" && (e.timelineStartInfo.pts === void 0 && (e.timelineStartInfo.pts = t.pts), e.minSegmentPts === void 0 ? e.minSegmentPts = t.pts : e.minSegmentPts = Math.min(e.minSegmentPts, t.pts), e.maxSegmentPts === void 0 ? e.maxSegmentPts = t.pts : e.maxSegmentPts = Math.max(e.maxSegmentPts, t.pts)), typeof t.dts == "number" && (e.timelineStartInfo.dts === void 0 && (e.timelineStartInfo.dts = t.dts), e.minSegmentDts === void 0 ? e.minSegmentDts = t.dts : e.minSegmentDts = Math.min(e.minSegmentDts, t.dts), e.maxSegmentDts === void 0 ? e.maxSegmentDts = t.dts : e.maxSegmentDts = Math.max(e.maxSegmentDts, t.dts));
 }, En = function(e) {
   delete e.minSegmentDts, delete e.maxSegmentDts, delete e.minSegmentPts, delete e.maxSegmentPts;
 }, On = function(e, t) {
   var i, r, n = e.minSegmentDts;
   return t || (n -= e.timelineStartInfo.dts), i = e.timelineStartInfo.baseMediaDecodeTime, i += n, i = Math.max(0, i), e.type === "audio" && (r = e.samplerate / Cn, i *= r, i = Math.floor(i)), i;
-}, je = {
+}, Ze = {
   clearDtsInfo: En,
   calculateTrackBaseMediaDecodeTime: On,
   collectDtsInfo: In
@@ -1780,7 +1780,7 @@ var pn = {
   parseCaptionPackets: Nn,
   discardEmulationPreventionBytes: kn,
   USER_DATA_REGISTERED_ITU_T_T35: sr
-}, kt = M, Ae = or, R = function s(e) {
+}, Bt = M, De = or, R = function s(e) {
   e = e || {}, s.prototype.init.call(this), this.parse708captions_ = typeof e.parse708captions == "boolean" ? e.parse708captions : !0, this.captionPackets_ = [], this.ccStreams_ = [
     new P(0, 0),
     // eslint-disable-line no-use-before-define
@@ -1790,16 +1790,16 @@ var pn = {
     // eslint-disable-line no-use-before-define
     new P(1, 1)
     // eslint-disable-line no-use-before-define
-  ], this.parse708captions_ && (this.cc708Stream_ = new _({
+  ], this.parse708captions_ && (this.cc708Stream_ = new A({
     captionServices: e.captionServices
   })), this.reset(), this.ccStreams_.forEach(function(t) {
     t.on("data", this.trigger.bind(this, "data")), t.on("partialdone", this.trigger.bind(this, "partialdone")), t.on("done", this.trigger.bind(this, "done"));
   }, this), this.parse708captions_ && (this.cc708Stream_.on("data", this.trigger.bind(this, "data")), this.cc708Stream_.on("partialdone", this.trigger.bind(this, "partialdone")), this.cc708Stream_.on("done", this.trigger.bind(this, "done")));
 };
-R.prototype = new kt();
+R.prototype = new Bt();
 R.prototype.push = function(s) {
   var e, t, i;
-  if (s.nalUnitType === "sei_rbsp" && (e = Ae.parseSei(s.escapedRBSP), !!e.payload && e.payloadType === Ae.USER_DATA_REGISTERED_ITU_T_T35 && (t = Ae.parseUserData(e), !!t))) {
+  if (s.nalUnitType === "sei_rbsp" && (e = De.parseSei(s.escapedRBSP), !!e.payload && e.payloadType === De.USER_DATA_REGISTERED_ITU_T_T35 && (t = De.parseUserData(e), !!t))) {
     if (s.dts < this.latestDts_) {
       this.ignoreNextEqualDts_ = !0;
       return;
@@ -1807,7 +1807,7 @@ R.prototype.push = function(s) {
       this.numSameDts_--, this.numSameDts_ || (this.ignoreNextEqualDts_ = !1);
       return;
     }
-    i = Ae.parseCaptionPackets(s.pts, t), this.captionPackets_ = this.captionPackets_.concat(i), this.latestDts_ !== s.dts && (this.numSameDts_ = 0), this.numSameDts_++, this.latestDts_ = s.dts;
+    i = De.parseCaptionPackets(s.pts, t), this.captionPackets_ = this.captionPackets_.concat(i), this.latestDts_ !== s.dts && (this.numSameDts_ = 0), this.numSameDts_++, this.latestDts_ = s.dts;
   }
 };
 R.prototype.flushCCStreams = function(s) {
@@ -1914,49 +1914,49 @@ var Bn = {
 }, Vn = function(e) {
   var t = Bn[e] || e;
   return e & 4096 && e === t ? "" : String.fromCharCode(t);
-}, Ne = function(e) {
+}, ke = function(e) {
   return 32 <= e && e <= 127 || 160 <= e && e <= 255;
-}, H = function(e) {
+}, q = function(e) {
   this.windowNum = e, this.reset();
 };
-H.prototype.reset = function() {
+q.prototype.reset = function() {
   this.clearText(), this.pendingNewLine = !1, this.winAttr = {}, this.penAttr = {}, this.penLoc = {}, this.penColor = {}, this.visible = 0, this.rowLock = 0, this.columnLock = 0, this.priority = 0, this.relativePositioning = 0, this.anchorVertical = 0, this.anchorHorizontal = 0, this.anchorPoint = 0, this.rowCount = 1, this.virtualRowCount = this.rowCount + 1, this.columnCount = 41, this.windowStyle = 0, this.penStyle = 0;
 };
-H.prototype.getText = function() {
+q.prototype.getText = function() {
   return this.rows.join(`
 `);
 };
-H.prototype.clearText = function() {
+q.prototype.clearText = function() {
   this.rows = [""], this.rowIdx = 0;
 };
-H.prototype.newLine = function(s) {
+q.prototype.newLine = function(s) {
   for (this.rows.length >= this.virtualRowCount && typeof this.beforeRowOverflow == "function" && this.beforeRowOverflow(s), this.rows.length > 0 && (this.rows.push(""), this.rowIdx++); this.rows.length > this.virtualRowCount; )
     this.rows.shift(), this.rowIdx--;
 };
-H.prototype.isEmpty = function() {
+q.prototype.isEmpty = function() {
   return this.rows.length === 0 ? !0 : this.rows.length === 1 ? this.rows[0] === "" : !1;
 };
-H.prototype.addText = function(s) {
+q.prototype.addText = function(s) {
   this.rows[this.rowIdx] += s;
 };
-H.prototype.backspace = function() {
+q.prototype.backspace = function() {
   if (!this.isEmpty()) {
     var s = this.rows[this.rowIdx];
     this.rows[this.rowIdx] = s.substr(0, s.length - 1);
   }
 };
-var Ze = function(e, t, i) {
-  this.serviceNum = e, this.text = "", this.currentWindow = new H(-1), this.windows = [], this.stream = i, typeof t == "string" && this.createTextDecoder(t);
+var Je = function(e, t, i) {
+  this.serviceNum = e, this.text = "", this.currentWindow = new q(-1), this.windows = [], this.stream = i, typeof t == "string" && this.createTextDecoder(t);
 };
-Ze.prototype.init = function(s, e) {
+Je.prototype.init = function(s, e) {
   this.startPts = s;
   for (var t = 0; t < 8; t++)
-    this.windows[t] = new H(t), typeof e == "function" && (this.windows[t].beforeRowOverflow = e);
+    this.windows[t] = new q(t), typeof e == "function" && (this.windows[t].beforeRowOverflow = e);
 };
-Ze.prototype.setCurrentWindow = function(s) {
+Je.prototype.setCurrentWindow = function(s) {
   this.currentWindow = this.windows[s];
 };
-Ze.prototype.createTextDecoder = function(s) {
+Je.prototype.createTextDecoder = function(s) {
   if (typeof TextDecoder > "u")
     this.stream.trigger("log", {
       level: "warn",
@@ -1972,7 +1972,7 @@ Ze.prototype.createTextDecoder = function(s) {
       });
     }
 };
-var _ = function s(e) {
+var A = function s(e) {
   e = e || {}, s.prototype.init.call(this);
   var t = this, i = e.captionServices || {}, r = {}, n;
   Object.keys(i).forEach(function(a) {
@@ -1981,74 +1981,74 @@ var _ = function s(e) {
     a.type === 3 ? (t.new708Packet(), t.add708Bytes(a)) : (t.current708Packet === null && t.new708Packet(), t.add708Bytes(a));
   };
 };
-_.prototype = new kt();
-_.prototype.new708Packet = function() {
+A.prototype = new Bt();
+A.prototype.new708Packet = function() {
   this.current708Packet !== null && this.push708Packet(), this.current708Packet = {
     data: [],
     ptsVals: []
   };
 };
-_.prototype.add708Bytes = function(s) {
+A.prototype.add708Bytes = function(s) {
   var e = s.ccData, t = e >>> 8, i = e & 255;
   this.current708Packet.ptsVals.push(s.pts), this.current708Packet.data.push(t), this.current708Packet.data.push(i);
 };
-_.prototype.push708Packet = function() {
+A.prototype.push708Packet = function() {
   var s = this.current708Packet, e = s.data, t = null, i = null, r = 0, n = e[r++];
   for (s.seq = n >> 6, s.sizeCode = n & 63; r < e.length; r++)
     n = e[r++], t = n >> 5, i = n & 31, t === 7 && i > 0 && (n = e[r++], t = n), this.pushServiceBlock(t, r, i), i > 0 && (r += i - 1);
 };
-_.prototype.pushServiceBlock = function(s, e, t) {
+A.prototype.pushServiceBlock = function(s, e, t) {
   var i, r = e, n = this.current708Packet.data, a = this.services[s];
   for (a || (a = this.initService(s, r)); r < e + t && r < n.length; r++)
-    i = n[r], Ne(i) ? r = this.handleText(r, a) : i === 24 ? r = this.multiByteCharacter(r, a) : i === 16 ? r = this.extendedCommands(r, a) : 128 <= i && i <= 135 ? r = this.setCurrentWindow(r, a) : 152 <= i && i <= 159 ? r = this.defineWindow(r, a) : i === 136 ? r = this.clearWindows(r, a) : i === 140 ? r = this.deleteWindows(r, a) : i === 137 ? r = this.displayWindows(r, a) : i === 138 ? r = this.hideWindows(r, a) : i === 139 ? r = this.toggleWindows(r, a) : i === 151 ? r = this.setWindowAttributes(r, a) : i === 144 ? r = this.setPenAttributes(r, a) : i === 145 ? r = this.setPenColor(r, a) : i === 146 ? r = this.setPenLocation(r, a) : i === 143 ? a = this.reset(r, a) : i === 8 ? a.currentWindow.backspace() : i === 12 ? a.currentWindow.clearText() : i === 13 ? a.currentWindow.pendingNewLine = !0 : i === 14 ? a.currentWindow.clearText() : i === 141 && r++;
+    i = n[r], ke(i) ? r = this.handleText(r, a) : i === 24 ? r = this.multiByteCharacter(r, a) : i === 16 ? r = this.extendedCommands(r, a) : 128 <= i && i <= 135 ? r = this.setCurrentWindow(r, a) : 152 <= i && i <= 159 ? r = this.defineWindow(r, a) : i === 136 ? r = this.clearWindows(r, a) : i === 140 ? r = this.deleteWindows(r, a) : i === 137 ? r = this.displayWindows(r, a) : i === 138 ? r = this.hideWindows(r, a) : i === 139 ? r = this.toggleWindows(r, a) : i === 151 ? r = this.setWindowAttributes(r, a) : i === 144 ? r = this.setPenAttributes(r, a) : i === 145 ? r = this.setPenColor(r, a) : i === 146 ? r = this.setPenLocation(r, a) : i === 143 ? a = this.reset(r, a) : i === 8 ? a.currentWindow.backspace() : i === 12 ? a.currentWindow.clearText() : i === 13 ? a.currentWindow.pendingNewLine = !0 : i === 14 ? a.currentWindow.clearText() : i === 141 && r++;
 };
-_.prototype.extendedCommands = function(s, e) {
+A.prototype.extendedCommands = function(s, e) {
   var t = this.current708Packet.data, i = t[++s];
-  return Ne(i) && (s = this.handleText(s, e, {
+  return ke(i) && (s = this.handleText(s, e, {
     isExtended: !0
   })), s;
 };
-_.prototype.getPts = function(s) {
+A.prototype.getPts = function(s) {
   return this.current708Packet.ptsVals[Math.floor(s / 2)];
 };
-_.prototype.initService = function(s, e) {
+A.prototype.initService = function(s, e) {
   var i = "SERVICE" + s, t = this, i, r;
-  return i in this.serviceEncodings && (r = this.serviceEncodings[i]), this.services[s] = new Ze(s, r, t), this.services[s].init(this.getPts(e), function(n) {
+  return i in this.serviceEncodings && (r = this.serviceEncodings[i]), this.services[s] = new Je(s, r, t), this.services[s].init(this.getPts(e), function(n) {
     t.flushDisplayed(n, t.services[s]);
   }), this.services[s];
 };
-_.prototype.handleText = function(s, e, t) {
+A.prototype.handleText = function(s, e, t) {
   var i = t && t.isExtended, r = t && t.isMultiByte, n = this.current708Packet.data, a = i ? 4096 : 0, o = n[s], u = n[s + 1], f = e.currentWindow, l, d;
   return e.textDecoder_ && !i ? (r ? (d = [o, u], s++) : d = [o], l = e.textDecoder_.decode(new Uint8Array(d))) : l = Vn(a | o), f.pendingNewLine && !f.isEmpty() && f.newLine(this.getPts(s)), f.pendingNewLine = !1, f.addText(l), s;
 };
-_.prototype.multiByteCharacter = function(s, e) {
+A.prototype.multiByteCharacter = function(s, e) {
   var t = this.current708Packet.data, i = t[s + 1], r = t[s + 2];
-  return Ne(i) && Ne(r) && (s = this.handleText(++s, e, {
+  return ke(i) && ke(r) && (s = this.handleText(++s, e, {
     isMultiByte: !0
   })), s;
 };
-_.prototype.setCurrentWindow = function(s, e) {
+A.prototype.setCurrentWindow = function(s, e) {
   var t = this.current708Packet.data, i = t[s], r = i & 7;
   return e.setCurrentWindow(r), s;
 };
-_.prototype.defineWindow = function(s, e) {
+A.prototype.defineWindow = function(s, e) {
   var t = this.current708Packet.data, i = t[s], r = i & 7;
   e.setCurrentWindow(r);
   var n = e.currentWindow;
   return i = t[++s], n.visible = (i & 32) >> 5, n.rowLock = (i & 16) >> 4, n.columnLock = (i & 8) >> 3, n.priority = i & 7, i = t[++s], n.relativePositioning = (i & 128) >> 7, n.anchorVertical = i & 127, i = t[++s], n.anchorHorizontal = i, i = t[++s], n.anchorPoint = (i & 240) >> 4, n.rowCount = i & 15, i = t[++s], n.columnCount = i & 63, i = t[++s], n.windowStyle = (i & 56) >> 3, n.penStyle = i & 7, n.virtualRowCount = n.rowCount + 1, s;
 };
-_.prototype.setWindowAttributes = function(s, e) {
+A.prototype.setWindowAttributes = function(s, e) {
   var t = this.current708Packet.data, i = t[s], r = e.currentWindow.winAttr;
   return i = t[++s], r.fillOpacity = (i & 192) >> 6, r.fillRed = (i & 48) >> 4, r.fillGreen = (i & 12) >> 2, r.fillBlue = i & 3, i = t[++s], r.borderType = (i & 192) >> 6, r.borderRed = (i & 48) >> 4, r.borderGreen = (i & 12) >> 2, r.borderBlue = i & 3, i = t[++s], r.borderType += (i & 128) >> 5, r.wordWrap = (i & 64) >> 6, r.printDirection = (i & 48) >> 4, r.scrollDirection = (i & 12) >> 2, r.justify = i & 3, i = t[++s], r.effectSpeed = (i & 240) >> 4, r.effectDirection = (i & 12) >> 2, r.displayEffect = i & 3, s;
 };
-_.prototype.flushDisplayed = function(s, e) {
+A.prototype.flushDisplayed = function(s, e) {
   for (var t = [], i = 0; i < 8; i++)
     e.windows[i].visible && !e.windows[i].isEmpty() && t.push(e.windows[i].getText());
   e.endPts = s, e.text = t.join(`
 
 `), this.pushCaption(e), e.startPts = s;
 };
-_.prototype.pushCaption = function(s) {
+A.prototype.pushCaption = function(s) {
   s.text !== "" && (this.trigger("data", {
     startPts: s.startPts,
     endPts: s.endPts,
@@ -2056,54 +2056,54 @@ _.prototype.pushCaption = function(s) {
     stream: "cc708_" + s.serviceNum
   }), s.text = "", s.startPts = s.endPts);
 };
-_.prototype.displayWindows = function(s, e) {
+A.prototype.displayWindows = function(s, e) {
   var t = this.current708Packet.data, i = t[++s], r = this.getPts(s);
   this.flushDisplayed(r, e);
   for (var n = 0; n < 8; n++)
     i & 1 << n && (e.windows[n].visible = 1);
   return s;
 };
-_.prototype.hideWindows = function(s, e) {
+A.prototype.hideWindows = function(s, e) {
   var t = this.current708Packet.data, i = t[++s], r = this.getPts(s);
   this.flushDisplayed(r, e);
   for (var n = 0; n < 8; n++)
     i & 1 << n && (e.windows[n].visible = 0);
   return s;
 };
-_.prototype.toggleWindows = function(s, e) {
+A.prototype.toggleWindows = function(s, e) {
   var t = this.current708Packet.data, i = t[++s], r = this.getPts(s);
   this.flushDisplayed(r, e);
   for (var n = 0; n < 8; n++)
     i & 1 << n && (e.windows[n].visible ^= 1);
   return s;
 };
-_.prototype.clearWindows = function(s, e) {
+A.prototype.clearWindows = function(s, e) {
   var t = this.current708Packet.data, i = t[++s], r = this.getPts(s);
   this.flushDisplayed(r, e);
   for (var n = 0; n < 8; n++)
     i & 1 << n && e.windows[n].clearText();
   return s;
 };
-_.prototype.deleteWindows = function(s, e) {
+A.prototype.deleteWindows = function(s, e) {
   var t = this.current708Packet.data, i = t[++s], r = this.getPts(s);
   this.flushDisplayed(r, e);
   for (var n = 0; n < 8; n++)
     i & 1 << n && e.windows[n].reset();
   return s;
 };
-_.prototype.setPenAttributes = function(s, e) {
+A.prototype.setPenAttributes = function(s, e) {
   var t = this.current708Packet.data, i = t[s], r = e.currentWindow.penAttr;
   return i = t[++s], r.textTag = (i & 240) >> 4, r.offset = (i & 12) >> 2, r.penSize = i & 3, i = t[++s], r.italics = (i & 128) >> 7, r.underline = (i & 64) >> 6, r.edgeType = (i & 56) >> 3, r.fontStyle = i & 7, s;
 };
-_.prototype.setPenColor = function(s, e) {
+A.prototype.setPenColor = function(s, e) {
   var t = this.current708Packet.data, i = t[s], r = e.currentWindow.penColor;
   return i = t[++s], r.fgOpacity = (i & 192) >> 6, r.fgRed = (i & 48) >> 4, r.fgGreen = (i & 12) >> 2, r.fgBlue = i & 3, i = t[++s], r.bgOpacity = (i & 192) >> 6, r.bgRed = (i & 48) >> 4, r.bgGreen = (i & 12) >> 2, r.bgBlue = i & 3, i = t[++s], r.edgeRed = (i & 48) >> 4, r.edgeGreen = (i & 12) >> 2, r.edgeBlue = i & 3, s;
 };
-_.prototype.setPenLocation = function(s, e) {
+A.prototype.setPenLocation = function(s, e) {
   var t = this.current708Packet.data, i = t[s], r = e.currentWindow.penLoc;
   return e.currentWindow.pendingNewLine = !0, i = t[++s], r.row = i & 15, i = t[++s], r.column = i & 63, s;
 };
-_.prototype.reset = function(s, e) {
+A.prototype.reset = function(s, e) {
   var t = this.getPts(s);
   return this.flushDisplayed(t, e), this.initService(e.serviceNum, s);
 };
@@ -2288,10 +2288,10 @@ var $n = {
   // └
   831: 9496
   // ┘
-}, De = function(e) {
+}, Ue = function(e) {
   return e === null ? "" : (e = $n[e] || e, String.fromCharCode(e));
-}, Je = 14, zn = [4352, 4384, 4608, 4640, 5376, 5408, 5632, 5664, 5888, 5920, 4096, 4864, 4896, 5120, 5152], Q = function() {
-  for (var e = [], t = Je + 1; t--; )
+}, Qe = 14, zn = [4352, 4384, 4608, 4640, 5376, 5408, 5632, 5664, 5888, 5920, 4096, 4864, 4896, 5120, 5152], ee = function() {
+  for (var e = [], t = Qe + 1; t--; )
     e.push("");
   return e;
 }, P = function s(e, t) {
@@ -2317,15 +2317,15 @@ var $n = {
       else if (r === this.BACKSPACE_)
         this.mode_ === "popOn" ? this.nonDisplayed_[this.row_] = this.nonDisplayed_[this.row_].slice(0, -1) : this.displayed_[this.row_] = this.displayed_[this.row_].slice(0, -1);
       else if (r === this.ERASE_DISPLAYED_MEMORY_)
-        this.flushDisplayed(i.pts), this.displayed_ = Q();
+        this.flushDisplayed(i.pts), this.displayed_ = ee();
       else if (r === this.ERASE_NON_DISPLAYED_MEMORY_)
-        this.nonDisplayed_ = Q();
+        this.nonDisplayed_ = ee();
       else if (r === this.RESUME_DIRECT_CAPTIONING_)
-        this.mode_ !== "paintOn" && (this.flushDisplayed(i.pts), this.displayed_ = Q()), this.mode_ = "paintOn", this.startPts_ = i.pts;
+        this.mode_ !== "paintOn" && (this.flushDisplayed(i.pts), this.displayed_ = ee()), this.mode_ = "paintOn", this.startPts_ = i.pts;
       else if (this.isSpecialCharacter(a, o))
-        a = (a & 3) << 8, u = De(a | o), this[this.mode_](i.pts, u), this.column_++;
+        a = (a & 3) << 8, u = Ue(a | o), this[this.mode_](i.pts, u), this.column_++;
       else if (this.isExtCharacter(a, o))
-        this.mode_ === "popOn" ? this.nonDisplayed_[this.row_] = this.nonDisplayed_[this.row_].slice(0, -1) : this.displayed_[this.row_] = this.displayed_[this.row_].slice(0, -1), a = (a & 3) << 8, u = De(a | o), this[this.mode_](i.pts, u), this.column_++;
+        this.mode_ === "popOn" ? this.nonDisplayed_[this.row_] = this.nonDisplayed_[this.row_].slice(0, -1) : this.displayed_[this.row_] = this.displayed_[this.row_].slice(0, -1), a = (a & 3) << 8, u = Ue(a | o), this[this.mode_](i.pts, u), this.column_++;
       else if (this.isMidRowCode(a, o))
         this.clearFormatting(i.pts), this[this.mode_](i.pts, " "), this.column_++, (o & 14) === 14 && this.addFormatting(i.pts, ["i"]), (o & 1) === 1 && this.addFormatting(i.pts, ["u"]);
       else if (this.isOffsetControlCode(a, o))
@@ -2333,10 +2333,10 @@ var $n = {
       else if (this.isPAC(a, o)) {
         var f = zn.indexOf(r & 7968);
         this.mode_ === "rollUp" && (f - this.rollUpRows_ + 1 < 0 && (f = this.rollUpRows_ - 1), this.setRollUp(i.pts, f)), f !== this.row_ && (this.clearFormatting(i.pts), this.row_ = f), o & 1 && this.formatting_.indexOf("u") === -1 && this.addFormatting(i.pts, ["u"]), (r & 16) === 16 && (this.column_ = ((r & 14) >> 1) * 4), this.isColorPAC(o) && (o & 14) === 14 && this.addFormatting(i.pts, ["i"]);
-      } else this.isNormalChar(a) && (o === 0 && (o = null), u = De(a), u += De(o), this[this.mode_](i.pts, u), this.column_ += u.length);
+      } else this.isNormalChar(a) && (o === 0 && (o = null), u = Ue(a), u += Ue(o), this[this.mode_](i.pts, u), this.column_ += u.length);
   };
 };
-P.prototype = new kt();
+P.prototype = new Bt();
 P.prototype.flushDisplayed = function(s) {
   var e = this.displayed_.map(function(t, i) {
     try {
@@ -2357,7 +2357,7 @@ P.prototype.flushDisplayed = function(s) {
   });
 };
 P.prototype.reset = function() {
-  this.mode_ = "popOn", this.topRow_ = 0, this.startPts_ = 0, this.displayed_ = Q(), this.nonDisplayed_ = Q(), this.lastControlCode_ = null, this.column_ = 0, this.row_ = Je, this.rollUpRows_ = 2, this.formatting_ = [];
+  this.mode_ = "popOn", this.topRow_ = 0, this.startPts_ = 0, this.displayed_ = ee(), this.nonDisplayed_ = ee(), this.lastControlCode_ = null, this.column_ = 0, this.row_ = Qe, this.rollUpRows_ = 2, this.formatting_ = [];
 };
 P.prototype.setConstants = function() {
   this.dataChannel_ === 0 ? (this.BASE_ = 16, this.EXT_ = 17, this.CONTROL_ = (20 | this.field_) << 8, this.OFFSET_ = 23) : this.dataChannel_ === 1 && (this.BASE_ = 24, this.EXT_ = 25, this.CONTROL_ = (28 | this.field_) << 8, this.OFFSET_ = 31), this.PADDING_ = 0, this.RESUME_CAPTION_LOADING_ = this.CONTROL_ | 32, this.END_OF_CAPTION_ = this.CONTROL_ | 47, this.ROLL_UP_2_ROWS_ = this.CONTROL_ | 37, this.ROLL_UP_3_ROWS_ = this.CONTROL_ | 38, this.ROLL_UP_4_ROWS_ = this.CONTROL_ | 39, this.CARRIAGE_RETURN_ = this.CONTROL_ | 45, this.RESUME_DIRECT_CAPTIONING_ = this.CONTROL_ | 41, this.BACKSPACE_ = this.CONTROL_ | 33, this.ERASE_DISPLAYED_MEMORY_ = this.CONTROL_ | 44, this.ERASE_NON_DISPLAYED_MEMORY_ = this.CONTROL_ | 46;
@@ -2384,7 +2384,7 @@ P.prototype.isNormalChar = function(s) {
   return s >= 32 && s <= 127;
 };
 P.prototype.setRollUp = function(s, e) {
-  if (this.mode_ !== "rollUp" && (this.row_ = Je, this.mode_ = "rollUp", this.flushDisplayed(s), this.nonDisplayed_ = Q(), this.displayed_ = Q()), e !== void 0 && e !== this.row_)
+  if (this.mode_ !== "rollUp" && (this.row_ = Qe, this.mode_ = "rollUp", this.flushDisplayed(s), this.nonDisplayed_ = ee(), this.displayed_ = ee()), e !== void 0 && e !== this.row_)
     for (var t = 0; t < this.rollUpRows_; t++)
       this.displayed_[e - t] = this.displayed_[this.row_ - t], this.displayed_[this.row_ - t] = "";
   e === void 0 && (e = this.row_), this.topRow_ = e - this.rollUpRows_ + 1;
@@ -2416,7 +2416,7 @@ P.prototype.shiftRowsUp_ = function() {
   var s;
   for (s = 0; s < this.topRow_; s++)
     this.displayed_[s] = "";
-  for (s = this.row_ + 1; s < Je + 1; s++)
+  for (s = this.row_ + 1; s < Qe + 1; s++)
     this.displayed_[s] = "";
   for (s = this.topRow_; s < this.row_; s++)
     this.displayed_[s] = this.displayed_[s + 1];
@@ -2429,12 +2429,12 @@ P.prototype.paintOn = function(s, e) {
 var ur = {
   CaptionStream: R,
   Cea608Stream: P,
-  Cea708Stream: _
-}, Qe = {
+  Cea708Stream: A
+}, et = {
   H264_STREAM_TYPE: 27,
   ADTS_STREAM_TYPE: 15,
   METADATA_STREAM_TYPE: 21
-}, Gn = M, Wn = 8589934592, Hn = 4294967296, Jt = "shared", wt = function(e, t) {
+}, Gn = M, Wn = 8589934592, Hn = 4294967296, Jt = "shared", _t = function(e, t) {
   var i = 1;
   for (e > t && (i = -1); Math.abs(t - e) > Hn; )
     e += i * Wn;
@@ -2442,7 +2442,7 @@ var ur = {
 }, lr = function s(e) {
   var t, i;
   s.prototype.init.call(this), this.type_ = e || Jt, this.push = function(r) {
-    this.type_ !== Jt && r.type !== this.type_ || (i === void 0 && (i = r.dts), r.dts = wt(r.dts, i), r.pts = wt(r.pts, i), t = r.dts, this.trigger("data", r));
+    this.type_ !== Jt && r.type !== this.type_ || (i === void 0 && (i = r.dts), r.dts = _t(r.dts, i), r.pts = _t(r.pts, i), t = r.dts, this.trigger("data", r));
   }, this.flush = function() {
     i = t, this.trigger("done");
   }, this.endTimeline = function() {
@@ -2456,16 +2456,16 @@ var ur = {
 lr.prototype = new Gn();
 var fr = {
   TimestampRolloverStream: lr,
-  handleRollover: wt
-}, Yn = M, qn = Qe, q = ji, ke;
-ke = function(e) {
+  handleRollover: _t
+}, Yn = M, qn = et, K = ji, Be;
+Be = function(e) {
   var t = {
     // the bytes of the program-level descriptor field in MP2T
     // see ISO/IEC 13818-1:2013 (E), section 2.6 "Program and
     // program element descriptors"
     descriptor: e && e.descriptor
   }, i = 0, r = [], n = 0, a;
-  if (ke.prototype.init.call(this), this.dispatchType = qn.METADATA_STREAM_TYPE.toString(16), t.descriptor)
+  if (Be.prototype.init.call(this), this.dispatchType = qn.METADATA_STREAM_TYPE.toString(16), t.descriptor)
     for (a = 0; a < t.descriptor.length; a++)
       this.dispatchType += ("00" + t.descriptor[a].toString(16)).slice(-2);
   this.push = function(o) {
@@ -2478,7 +2478,7 @@ ke = function(e) {
         });
         return;
       }
-      if (r.push(o), n += o.data.byteLength, r.length === 1 && (i = q.parseSyncSafeInteger(o.data.subarray(6, 10)), i += 10), !(n < i)) {
+      if (r.push(o), n += o.data.byteLength, r.length === 1 && (i = K.parseSyncSafeInteger(o.data.subarray(6, 10)), i += 10), !(n < i)) {
         for (u = {
           data: new Uint8Array(i),
           frames: [],
@@ -2486,9 +2486,9 @@ ke = function(e) {
           dts: r[0].dts
         }, h = 0; h < i; )
           u.data.set(r[0].data.subarray(0, i - h), h), h += r[0].data.byteLength, n -= r[0].data.byteLength, r.shift();
-        f = 10, u.data[5] & 64 && (f += 4, f += q.parseSyncSafeInteger(u.data.subarray(10, 14)), i -= q.parseSyncSafeInteger(u.data.subarray(16, 20)));
+        f = 10, u.data[5] & 64 && (f += 4, f += K.parseSyncSafeInteger(u.data.subarray(10, 14)), i -= K.parseSyncSafeInteger(u.data.subarray(16, 20)));
         do {
-          if (l = q.parseSyncSafeInteger(u.data.subarray(f + 4, f + 8)), l < 1) {
+          if (l = K.parseSyncSafeInteger(u.data.subarray(f + 4, f + 8)), l < 1) {
             this.trigger("log", {
               level: "warn",
               message: "Malformed ID3 frame encountered. Skipping remaining metadata parsing."
@@ -2498,7 +2498,7 @@ ke = function(e) {
           if (m = String.fromCharCode(u.data[f], u.data[f + 1], u.data[f + 2], u.data[f + 3]), d = {
             id: m,
             data: u.data.subarray(f + 10, f + l + 10)
-          }, d.key = d.id, q.frameParsers[d.id] ? q.frameParsers[d.id](d) : d.id[0] === "T" ? q.frameParsers["T*"](d) : d.id[0] === "W" && q.frameParsers["W*"](d), d.owner === "com.apple.streaming.transportStreamTimestamp") {
+          }, d.key = d.id, K.frameParsers[d.id] ? K.frameParsers[d.id](d) : d.id[0] === "T" ? K.frameParsers["T*"](d) : d.id[0] === "W" && K.frameParsers["W*"](d), d.owner === "com.apple.streaming.transportStreamTimestamp") {
             var p = d.data, c = (p[3] & 1) << 30 | p[4] << 22 | p[5] << 14 | p[6] << 6 | p[7] >>> 2;
             c *= 4, c += p[7] & 3, d.timeStamp = c, u.pts === void 0 && u.dts === void 0 && (u.pts = d.timeStamp, u.dts = d.timeStamp), this.trigger("timestamp", d);
           }
@@ -2509,32 +2509,32 @@ ke = function(e) {
     }
   };
 };
-ke.prototype = new Yn();
-var Xn = ke, Bt = M, lt = ur, B = Qe, Kn = fr.TimestampRolloverStream, Be, ve, Ve, re = 188, ft = 71;
-Be = function() {
-  var e = new Uint8Array(re), t = 0;
-  Be.prototype.init.call(this), this.push = function(i) {
-    var r = 0, n = re, a;
+Be.prototype = new Yn();
+var Xn = Be, Vt = M, ft = ur, $ = et, Kn = fr.TimestampRolloverStream, Ve, Se, $e, ne = 188, dt = 71;
+Ve = function() {
+  var e = new Uint8Array(ne), t = 0;
+  Ve.prototype.init.call(this), this.push = function(i) {
+    var r = 0, n = ne, a;
     for (t ? (a = new Uint8Array(i.byteLength + t), a.set(e.subarray(0, t)), a.set(i, t), t = 0) : a = i; n < a.byteLength; ) {
-      if (a[r] === ft && a[n] === ft) {
-        this.trigger("data", a.subarray(r, n)), r += re, n += re;
+      if (a[r] === dt && a[n] === dt) {
+        this.trigger("data", a.subarray(r, n)), r += ne, n += ne;
         continue;
       }
       r++, n++;
     }
     r < a.byteLength && (e.set(a.subarray(r), 0), t = a.byteLength - r);
   }, this.flush = function() {
-    t === re && e[0] === ft && (this.trigger("data", e), t = 0), this.trigger("done");
+    t === ne && e[0] === dt && (this.trigger("data", e), t = 0), this.trigger("done");
   }, this.endTimeline = function() {
     this.flush(), this.trigger("endedtimeline");
   }, this.reset = function() {
     t = 0, this.trigger("reset");
   };
 };
-Be.prototype = new Bt();
-ve = function() {
+Ve.prototype = new Vt();
+Se = function() {
   var e, t, i, r;
-  ve.prototype.init.call(this), r = this, this.packetsWaitingForPmt = [], this.programMapTable = void 0, e = function(a, o) {
+  Se.prototype.init.call(this), r = this, this.packetsWaitingForPmt = [], this.programMapTable = void 0, e = function(a, o) {
     var u = 0;
     o.payloadUnitStartIndicator && (u += a[u] + 1), o.type === "pat" ? t(a.subarray(u), o) : i(a.subarray(u), o);
   }, t = function(a, o) {
@@ -2548,7 +2548,7 @@ ve = function() {
         "timed-metadata": {}
       }, u = (a[1] & 15) << 8 | a[2], f = 3 + u - 4, l = (a[10] & 15) << 8 | a[11], d = 12 + l; d < f; ) {
         var h = a[d], m = (a[d + 1] & 31) << 8 | a[d + 2];
-        h === B.H264_STREAM_TYPE && r.programMapTable.video === null ? r.programMapTable.video = m : h === B.ADTS_STREAM_TYPE && r.programMapTable.audio === null ? r.programMapTable.audio = m : h === B.METADATA_STREAM_TYPE && (r.programMapTable["timed-metadata"][m] = h), d += ((a[d + 3] & 15) << 8 | a[d + 4]) + 5;
+        h === $.H264_STREAM_TYPE && r.programMapTable.video === null ? r.programMapTable.video = m : h === $.ADTS_STREAM_TYPE && r.programMapTable.audio === null ? r.programMapTable.audio = m : h === $.METADATA_STREAM_TYPE && (r.programMapTable["timed-metadata"][m] = h), d += ((a[d + 3] & 15) << 8 | a[d + 4]) + 5;
       }
       o.programMapTable = r.programMapTable;
     }
@@ -2561,15 +2561,15 @@ ve = function() {
         this.processPes_.apply(this, this.packetsWaitingForPmt.shift());
     else this.programMapTable === void 0 ? this.packetsWaitingForPmt.push([n, o, a]) : this.processPes_(n, o, a);
   }, this.processPes_ = function(n, a, o) {
-    o.pid === this.programMapTable.video ? o.streamType = B.H264_STREAM_TYPE : o.pid === this.programMapTable.audio ? o.streamType = B.ADTS_STREAM_TYPE : o.streamType = this.programMapTable["timed-metadata"][o.pid], o.type = "pes", o.data = n.subarray(a), this.trigger("data", o);
+    o.pid === this.programMapTable.video ? o.streamType = $.H264_STREAM_TYPE : o.pid === this.programMapTable.audio ? o.streamType = $.ADTS_STREAM_TYPE : o.streamType = this.programMapTable["timed-metadata"][o.pid], o.type = "pes", o.data = n.subarray(a), this.trigger("data", o);
   };
 };
-ve.prototype = new Bt();
-ve.STREAM_TYPES = {
+Se.prototype = new Vt();
+Se.STREAM_TYPES = {
   h264: 27,
   adts: 15
 };
-Ve = function() {
+$e = function() {
   var e = this, t = !1, i = {
     data: [],
     size: 0
@@ -2585,27 +2585,27 @@ Ve = function() {
   }, u = function(l, d, h) {
     var m = new Uint8Array(l.size), p = {
       type: d
-    }, c = 0, g = 0, T = !1, F;
+    }, c = 0, g = 0, b = !1, D;
     if (!(!l.data.length || l.size < 9)) {
       for (p.trackId = l.data[0].pid, c = 0; c < l.data.length; c++)
-        F = l.data[c], m.set(F.data, g), g += F.data.byteLength;
-      o(m, p), T = d === "video" || p.packetLength <= l.size, (h || T) && (l.size = 0, l.data.length = 0), T && e.trigger("data", p);
+        D = l.data[c], m.set(D.data, g), g += D.data.byteLength;
+      o(m, p), b = d === "video" || p.packetLength <= l.size, (h || b) && (l.size = 0, l.data.length = 0), b && e.trigger("data", p);
     }
   };
-  Ve.prototype.init.call(this), this.push = function(f) {
+  $e.prototype.init.call(this), this.push = function(f) {
     ({
       pat: function() {
       },
       pes: function() {
         var d, h;
         switch (f.streamType) {
-          case B.H264_STREAM_TYPE:
+          case $.H264_STREAM_TYPE:
             d = i, h = "video";
             break;
-          case B.ADTS_STREAM_TYPE:
+          case $.ADTS_STREAM_TYPE:
             d = r, h = "audio";
             break;
-          case B.METADATA_STREAM_TYPE:
+          case $.METADATA_STREAM_TYPE:
             d = n, h = "timed-metadata";
             break;
           default:
@@ -2664,22 +2664,22 @@ Ve = function() {
     t = !1, this.flushStreams_(), this.trigger("done");
   };
 };
-Ve.prototype = new Bt();
+$e.prototype = new Vt();
 var dr = {
   PAT_PID: 0,
-  MP2T_PACKET_LENGTH: re,
-  TransportPacketStream: Be,
-  TransportParseStream: ve,
-  ElementaryStream: Ve,
+  MP2T_PACKET_LENGTH: ne,
+  TransportPacketStream: Ve,
+  TransportParseStream: Se,
+  ElementaryStream: $e,
   TimestampRolloverStream: Kn,
-  CaptionStream: lt.CaptionStream,
-  Cea608Stream: lt.Cea608Stream,
-  Cea708Stream: lt.Cea708Stream,
+  CaptionStream: ft.CaptionStream,
+  Cea608Stream: ft.Cea608Stream,
+  Cea708Stream: ft.Cea708Stream,
   MetadataStream: Xn
 };
-for (var dt in B)
-  B.hasOwnProperty(dt) && (dr[dt] = B[dt]);
-var et = dr, jn = [96e3, 88200, 64e3, 48e3, 44100, 32e3, 24e3, 22050, 16e3, 12e3, 11025, 8e3, 7350], hr = function(e, t) {
+for (var ht in $)
+  $.hasOwnProperty(ht) && (dr[ht] = $[ht]);
+var tt = dr, jn = [96e3, 88200, 64e3, 48e3, 44100, 32e3, 24e3, 22050, 16e3, 12e3, 11025, 8e3, 7350], hr = function(e, t) {
   var i = e[t + 6] << 21 | e[t + 7] << 14 | e[t + 8] << 7 | e[t + 9], r = e[t + 5], n = (r & 16) >> 4;
   return i = i >= 0 ? i : 0, n ? i + 20 : i + 10;
 }, Zn = function s(e, t) {
@@ -2733,17 +2733,17 @@ var et = dr, jn = [96e3, 88200, 64e3, 48e3, 44100, 32e3, 24e3, 22050, 16e3, 12e3
     t += 10, t += i;
   } while (t < e.byteLength);
   return null;
-}, tt = {
+}, it = {
   isLikelyAacData: Jn,
   parseId3TagSize: hr,
   parseAdtsSize: ta,
   parseType: ia,
   parseSampleRate: ra,
   parseAacTimestamp: na
-}, aa = M, ei = tt, $e;
-$e = function() {
+}, aa = M, ei = it, ze;
+ze = function() {
   var e = new Uint8Array(), t = 0;
-  $e.prototype.init.call(this), this.setTimestamp = function(i) {
+  ze.prototype.init.call(this), this.setTimestamp = function(i) {
     t = i;
   }, this.push = function(i) {
     var r = 0, n = 0, a, o, u, f;
@@ -2776,8 +2776,8 @@ $e = function() {
     e = new Uint8Array(), this.trigger("endedtimeline");
   };
 };
-$e.prototype = new aa();
-var pr = $e, sa = ["audioobjecttype", "channelcount", "samplerate", "samplingfrequencyindex", "samplesize"], mr = sa, oa = ["width", "height", "profileIdc", "levelIdc", "profileCompatibility", "sarRatio"], cr = oa, it = M, Se = Xe, de = nr, Ue = ar, V = je, G = et, Oe = j, ti = qe, ua = It.H264Stream, la = pr, fa = tt.isLikelyAacData, da = j.ONE_SECOND_IN_TS, gr = mr, xr = cr, Te, ae, ze, ee, ha = function(e, t) {
+ze.prototype = new aa();
+var pr = ze, sa = ["audioobjecttype", "channelcount", "samplerate", "samplingfrequencyindex", "samplesize"], mr = sa, oa = ["width", "height", "profileIdc", "levelIdc", "profileCompatibility", "sarRatio"], cr = oa, rt = M, Te = Ke, he = nr, Pe = ar, z = Ze, H = tt, Le = J, ti = Xe, ua = Et.H264Stream, la = pr, fa = it.isLikelyAacData, da = J.ONE_SECOND_IN_TS, gr = mr, xr = cr, be, se, Ge, te, ha = function(e, t) {
   t.stream = e, this.trigger("log", t);
 }, ii = function(e, t) {
   for (var i = Object.keys(t), r = 0; r < i.length; r++) {
@@ -2807,10 +2807,10 @@ var pr = $e, sa = ["audioobjecttype", "channelcount", "samplerate", "samplingfre
     baseMediaDecodeTime: e
   };
 };
-ae = function(e, t) {
+se = function(e, t) {
   var i = [], r, n = 0, a = 0, o = 1 / 0;
-  t = t || {}, r = t.firstSequenceNumber || 0, ae.prototype.init.call(this), this.push = function(u) {
-    V.collectDtsInfo(e, u), e && gr.forEach(function(f) {
+  t = t || {}, r = t.firstSequenceNumber || 0, se.prototype.init.call(this), this.push = function(u) {
+    z.collectDtsInfo(e, u), e && gr.forEach(function(f) {
       e[f] = u[f];
     }), i.push(u);
   }, this.setEarliestDts = function(u) {
@@ -2825,11 +2825,11 @@ ae = function(e, t) {
       this.trigger("done", "AudioSegmentStream");
       return;
     }
-    u = Ue.trimAdtsFramesByEarliestDts(i, e, n), e.baseMediaDecodeTime = V.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps), p = Ue.prefixWithSilence(e, u, a, o), e.samples = Ue.generateSampleTable(u), l = Se.mdat(Ue.concatenateFrameData(u)), i = [], f = Se.moof(r, [e]), d = new Uint8Array(f.byteLength + l.byteLength), r++, d.set(f), d.set(l, f.byteLength), V.clearDtsInfo(e), h = Math.ceil(da * 1024 / e.samplerate), u.length && (m = u.length * h, this.trigger("segmentTimingInfo", yr(
+    u = Pe.trimAdtsFramesByEarliestDts(i, e, n), e.baseMediaDecodeTime = z.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps), p = Pe.prefixWithSilence(e, u, a, o), e.samples = Pe.generateSampleTable(u), l = Te.mdat(Pe.concatenateFrameData(u)), i = [], f = Te.moof(r, [e]), d = new Uint8Array(f.byteLength + l.byteLength), r++, d.set(f), d.set(l, f.byteLength), z.clearDtsInfo(e), h = Math.ceil(da * 1024 / e.samplerate), u.length && (m = u.length * h, this.trigger("segmentTimingInfo", yr(
       // The audio track's baseMediaDecodeTime is in audio clock cycles, but the
       // frame info is in video clock cycles. Convert to match expectation of
       // listeners (that all timestamps will be based on video clock cycles).
-      Oe.audioTsToVideoTs(e.baseMediaDecodeTime, e.samplerate),
+      Le.audioTsToVideoTs(e.baseMediaDecodeTime, e.samplerate),
       // frame times are already in video clock, as is segment duration
       u[0].dts,
       u[0].pts,
@@ -2844,14 +2844,14 @@ ae = function(e, t) {
       boxes: d
     }), this.trigger("done", "AudioSegmentStream");
   }, this.reset = function() {
-    V.clearDtsInfo(e), i = [], this.trigger("reset");
+    z.clearDtsInfo(e), i = [], this.trigger("reset");
   };
 };
-ae.prototype = new it();
-Te = function(e, t) {
+se.prototype = new rt();
+be = function(e, t) {
   var i, r = [], n = [], a, o;
-  t = t || {}, i = t.firstSequenceNumber || 0, Te.prototype.init.call(this), delete e.minPTS, this.gopCache_ = [], this.push = function(u) {
-    V.collectDtsInfo(e, u), u.nalUnitType === "seq_parameter_set_rbsp" && !a && (a = u.config, e.sps = [u.data], xr.forEach(function(f) {
+  t = t || {}, i = t.firstSequenceNumber || 0, be.prototype.init.call(this), delete e.minPTS, this.gopCache_ = [], this.push = function(u) {
+    z.collectDtsInfo(e, u), u.nalUnitType === "seq_parameter_set_rbsp" && !a && (a = u.config, e.sps = [u.data], xr.forEach(function(f) {
       e[f] = a[f];
     }, this)), u.nalUnitType === "pic_parameter_set_rbsp" && !o && (o = u.data, e.pps = [u.data]), r.push(u);
   }, this.flush = function() {
@@ -2861,9 +2861,9 @@ Te = function(e, t) {
       this.resetStream_(), this.trigger("done", "VideoSegmentStream");
       return;
     }
-    if (u = de.groupNalsIntoFrames(r), l = de.groupFramesIntoGops(u), l[0][0].keyFrame || (f = this.getGopForFusion_(r[0], e), f ? (p = f.duration, l.unshift(f), l.byteLength += f.byteLength, l.nalCount += f.nalCount, l.pts = f.pts, l.dts = f.dts, l.duration += f.duration) : l = de.extendFirstKeyFrame(l)), n.length) {
-      var T;
-      if (t.alignGopsAtEnd ? T = this.alignGopsAtEnd_(l) : T = this.alignGopsAtStart_(l), !T) {
+    if (u = he.groupNalsIntoFrames(r), l = he.groupFramesIntoGops(u), l[0][0].keyFrame || (f = this.getGopForFusion_(r[0], e), f ? (p = f.duration, l.unshift(f), l.byteLength += f.byteLength, l.nalCount += f.nalCount, l.pts = f.pts, l.dts = f.dts, l.duration += f.duration) : l = he.extendFirstKeyFrame(l)), n.length) {
+      var b;
+      if (t.alignGopsAtEnd ? b = this.alignGopsAtEnd_(l) : b = this.alignGopsAtStart_(l), !b) {
         this.gopCache_.unshift({
           gop: l.pop(),
           pps: e.pps,
@@ -2871,13 +2871,13 @@ Te = function(e, t) {
         }), this.gopCache_.length = Math.min(6, this.gopCache_.length), r = [], this.resetStream_(), this.trigger("done", "VideoSegmentStream");
         return;
       }
-      V.clearDtsInfo(e), l = T;
+      z.clearDtsInfo(e), l = b;
     }
-    V.collectDtsInfo(e, l), e.samples = de.generateSampleTable(l), h = Se.mdat(de.concatenateNalData(l)), e.baseMediaDecodeTime = V.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps), this.trigger("processedGopsInfo", l.map(function(F) {
+    z.collectDtsInfo(e, l), e.samples = he.generateSampleTable(l), h = Te.mdat(he.concatenateNalData(l)), e.baseMediaDecodeTime = z.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps), this.trigger("processedGopsInfo", l.map(function(D) {
       return {
-        pts: F.pts,
-        dts: F.dts,
-        byteLength: F.byteLength
+        pts: D.pts,
+        dts: D.dts,
+        byteLength: D.byteLength
       };
     })), c = l[0], g = l[l.length - 1], this.trigger("segmentTimingInfo", yr(e.baseMediaDecodeTime, c.dts, c.pts, g.dts + g.duration, g.pts + g.duration, p)), this.trigger("timingInfo", {
       start: l[0].pts,
@@ -2886,14 +2886,14 @@ Te = function(e, t) {
       gop: l.pop(),
       pps: e.pps,
       sps: e.sps
-    }), this.gopCache_.length = Math.min(6, this.gopCache_.length), r = [], this.trigger("baseMediaDecodeTime", e.baseMediaDecodeTime), this.trigger("timelineStartInfo", e.timelineStartInfo), d = Se.moof(i, [e]), m = new Uint8Array(d.byteLength + h.byteLength), i++, m.set(d), m.set(h, d.byteLength), this.trigger("data", {
+    }), this.gopCache_.length = Math.min(6, this.gopCache_.length), r = [], this.trigger("baseMediaDecodeTime", e.baseMediaDecodeTime), this.trigger("timelineStartInfo", e.timelineStartInfo), d = Te.moof(i, [e]), m = new Uint8Array(d.byteLength + h.byteLength), i++, m.set(d), m.set(h, d.byteLength), this.trigger("data", {
       track: e,
       boxes: m
     }), this.resetStream_(), this.trigger("done", "VideoSegmentStream");
   }, this.reset = function() {
     this.resetStream_(), r = [], this.gopCache_.length = 0, n.length = 0, this.trigger("reset");
   }, this.resetStream_ = function() {
-    V.clearDtsInfo(e), a = void 0, o = void 0;
+    z.clearDtsInfo(e), a = void 0, o = void 0;
   }, this.getGopForFusion_ = function(u) {
     var f = 45e3, l = 1 / 0, d, h, m, p, c;
     for (c = 0; c < this.gopCache_.length; c++)
@@ -2927,21 +2927,21 @@ Te = function(e, t) {
     var c;
     if (p ? c = l : c = m, c === 0)
       return u;
-    var g = u.slice(c), T = g.reduce(function(F, z) {
-      return F.byteLength += z.byteLength, F.duration += z.duration, F.nalCount += z.nalCount, F;
+    var g = u.slice(c), b = g.reduce(function(D, W) {
+      return D.byteLength += W.byteLength, D.duration += W.duration, D.nalCount += W.nalCount, D;
     }, {
       byteLength: 0,
       duration: 0,
       nalCount: 0
     });
-    return g.byteLength = T.byteLength, g.duration = T.duration, g.nalCount = T.nalCount, g.pts = g[0].pts, g.dts = g[0].dts, g;
+    return g.byteLength = b.byteLength, g.duration = b.duration, g.nalCount = b.nalCount, g.pts = g[0].pts, g.dts = g[0].dts, g;
   }, this.alignGopsWith = function(u) {
     n = u;
   };
 };
-Te.prototype = new it();
-ee = function(e, t) {
-  this.numberOfTracks = 0, this.metadataStream = t, e = e || {}, typeof e.remux < "u" ? this.remuxTracks = !!e.remux : this.remuxTracks = !0, typeof e.keepOriginalTimestamps == "boolean" ? this.keepOriginalTimestamps = e.keepOriginalTimestamps : this.keepOriginalTimestamps = !1, this.pendingTracks = [], this.videoTrack = null, this.pendingBoxes = [], this.pendingCaptions = [], this.pendingMetadata = [], this.pendingBytes = 0, this.emittedTracks = 0, ee.prototype.init.call(this), this.push = function(i) {
+be.prototype = new rt();
+te = function(e, t) {
+  this.numberOfTracks = 0, this.metadataStream = t, e = e || {}, typeof e.remux < "u" ? this.remuxTracks = !!e.remux : this.remuxTracks = !0, typeof e.keepOriginalTimestamps == "boolean" ? this.keepOriginalTimestamps = e.keepOriginalTimestamps : this.keepOriginalTimestamps = !1, this.pendingTracks = [], this.videoTrack = null, this.pendingBoxes = [], this.pendingCaptions = [], this.pendingMetadata = [], this.pendingBytes = 0, this.emittedTracks = 0, te.prototype.init.call(this), this.push = function(i) {
     if (i.text)
       return this.pendingCaptions.push(i);
     if (i.frames)
@@ -2949,8 +2949,8 @@ ee = function(e, t) {
     this.pendingTracks.push(i.track), this.pendingBytes += i.boxes.byteLength, i.track.type === "video" && (this.videoTrack = i.track, this.pendingBoxes.push(i.boxes)), i.track.type === "audio" && (this.audioTrack = i.track, this.pendingBoxes.unshift(i.boxes));
   };
 };
-ee.prototype = new it();
-ee.prototype.flush = function(s) {
+te.prototype = new rt();
+te.prototype.flush = function(s) {
   var e = 0, t = {
     captions: [],
     captionStreams: {},
@@ -2972,12 +2972,12 @@ ee.prototype.flush = function(s) {
   }, this)) : this.audioTrack && (a = this.audioTrack.timelineStartInfo.pts, gr.forEach(function(u) {
     t.info[u] = this.audioTrack[u];
   }, this)), this.videoTrack || this.audioTrack) {
-    for (this.pendingTracks.length === 1 ? t.type = this.pendingTracks[0].type : t.type = "combined", this.emittedTracks += this.pendingTracks.length, n = Se.initSegment(this.pendingTracks), t.initSegment = new Uint8Array(n.byteLength), t.initSegment.set(n), t.data = new Uint8Array(this.pendingBytes), o = 0; o < this.pendingBoxes.length; o++)
+    for (this.pendingTracks.length === 1 ? t.type = this.pendingTracks[0].type : t.type = "combined", this.emittedTracks += this.pendingTracks.length, n = Te.initSegment(this.pendingTracks), t.initSegment = new Uint8Array(n.byteLength), t.initSegment.set(n), t.data = new Uint8Array(this.pendingBytes), o = 0; o < this.pendingBoxes.length; o++)
       t.data.set(this.pendingBoxes[o], e), e += this.pendingBoxes[o].byteLength;
     for (o = 0; o < this.pendingCaptions.length; o++)
-      i = this.pendingCaptions[o], i.startTime = Oe.metadataTsToSeconds(i.startPts, a, this.keepOriginalTimestamps), i.endTime = Oe.metadataTsToSeconds(i.endPts, a, this.keepOriginalTimestamps), t.captionStreams[i.stream] = !0, t.captions.push(i);
+      i = this.pendingCaptions[o], i.startTime = Le.metadataTsToSeconds(i.startPts, a, this.keepOriginalTimestamps), i.endTime = Le.metadataTsToSeconds(i.endPts, a, this.keepOriginalTimestamps), t.captionStreams[i.stream] = !0, t.captions.push(i);
     for (o = 0; o < this.pendingMetadata.length; o++)
-      r = this.pendingMetadata[o], r.cueTime = Oe.metadataTsToSeconds(r.pts, a, this.keepOriginalTimestamps), t.metadata.push(r);
+      r = this.pendingMetadata[o], r.cueTime = Le.metadataTsToSeconds(r.pts, a, this.keepOriginalTimestamps), t.metadata.push(r);
     for (t.metadata.dispatchType = this.metadataStream.dispatchType, this.pendingTracks.length = 0, this.videoTrack = null, this.pendingBoxes.length = 0, this.pendingCaptions.length = 0, this.pendingBytes = 0, this.pendingMetadata.length = 0, this.trigger("data", t), o = 0; o < t.captions.length; o++)
       i = t.captions[o], this.trigger("caption", i);
     for (o = 0; o < t.metadata.length; o++)
@@ -2985,14 +2985,14 @@ ee.prototype.flush = function(s) {
   }
   this.emittedTracks >= this.numberOfTracks && (this.trigger("done"), this.emittedTracks = 0);
 };
-ee.prototype.setRemux = function(s) {
+te.prototype.setRemux = function(s) {
   this.remuxTracks = s;
 };
-ze = function(e) {
+Ge = function(e) {
   var t = this, i = !0, r, n;
-  ze.prototype.init.call(this), e = e || {}, this.baseMediaDecodeTime = e.baseMediaDecodeTime || 0, this.transmuxPipeline_ = {}, this.setupAacPipeline = function() {
+  Ge.prototype.init.call(this), e = e || {}, this.baseMediaDecodeTime = e.baseMediaDecodeTime || 0, this.transmuxPipeline_ = {}, this.setupAacPipeline = function() {
     var a = {};
-    this.transmuxPipeline_ = a, a.type = "aac", a.metadataStream = new G.MetadataStream(), a.aacStream = new la(), a.audioTimestampRolloverStream = new G.TimestampRolloverStream("audio"), a.timedMetadataTimestampRolloverStream = new G.TimestampRolloverStream("timed-metadata"), a.adtsStream = new ti(), a.coalesceStream = new ee(e, a.metadataStream), a.headOfPipeline = a.aacStream, a.aacStream.pipe(a.audioTimestampRolloverStream).pipe(a.adtsStream), a.aacStream.pipe(a.timedMetadataTimestampRolloverStream).pipe(a.metadataStream).pipe(a.coalesceStream), a.metadataStream.on("timestamp", function(o) {
+    this.transmuxPipeline_ = a, a.type = "aac", a.metadataStream = new H.MetadataStream(), a.aacStream = new la(), a.audioTimestampRolloverStream = new H.TimestampRolloverStream("audio"), a.timedMetadataTimestampRolloverStream = new H.TimestampRolloverStream("timed-metadata"), a.adtsStream = new ti(), a.coalesceStream = new te(e, a.metadataStream), a.headOfPipeline = a.aacStream, a.aacStream.pipe(a.audioTimestampRolloverStream).pipe(a.adtsStream), a.aacStream.pipe(a.timedMetadataTimestampRolloverStream).pipe(a.metadataStream).pipe(a.coalesceStream), a.metadataStream.on("timestamp", function(o) {
       a.aacStream.setTimestamp(o.timeStamp);
     }), a.aacStream.on("data", function(o) {
       o.type !== "timed-metadata" && o.type !== "audio" || a.audioSegmentStream || (n = n || {
@@ -3001,23 +3001,23 @@ ze = function(e) {
         },
         codec: "adts",
         type: "audio"
-      }, a.coalesceStream.numberOfTracks++, a.audioSegmentStream = new ae(n, e), a.audioSegmentStream.on("log", t.getLogTrigger_("audioSegmentStream")), a.audioSegmentStream.on("timingInfo", t.trigger.bind(t, "audioTimingInfo")), a.adtsStream.pipe(a.audioSegmentStream).pipe(a.coalesceStream), t.trigger("trackinfo", {
+      }, a.coalesceStream.numberOfTracks++, a.audioSegmentStream = new se(n, e), a.audioSegmentStream.on("log", t.getLogTrigger_("audioSegmentStream")), a.audioSegmentStream.on("timingInfo", t.trigger.bind(t, "audioTimingInfo")), a.adtsStream.pipe(a.audioSegmentStream).pipe(a.coalesceStream), t.trigger("trackinfo", {
         hasAudio: !!n,
         hasVideo: !!r
       }));
     }), a.coalesceStream.on("data", this.trigger.bind(this, "data")), a.coalesceStream.on("done", this.trigger.bind(this, "done")), ii(this, a);
   }, this.setupTsPipeline = function() {
     var a = {};
-    this.transmuxPipeline_ = a, a.type = "ts", a.metadataStream = new G.MetadataStream(), a.packetStream = new G.TransportPacketStream(), a.parseStream = new G.TransportParseStream(), a.elementaryStream = new G.ElementaryStream(), a.timestampRolloverStream = new G.TimestampRolloverStream(), a.adtsStream = new ti(), a.h264Stream = new ua(), a.captionStream = new G.CaptionStream(e), a.coalesceStream = new ee(e, a.metadataStream), a.headOfPipeline = a.packetStream, a.packetStream.pipe(a.parseStream).pipe(a.elementaryStream).pipe(a.timestampRolloverStream), a.timestampRolloverStream.pipe(a.h264Stream), a.timestampRolloverStream.pipe(a.adtsStream), a.timestampRolloverStream.pipe(a.metadataStream).pipe(a.coalesceStream), a.h264Stream.pipe(a.captionStream).pipe(a.coalesceStream), a.elementaryStream.on("data", function(o) {
+    this.transmuxPipeline_ = a, a.type = "ts", a.metadataStream = new H.MetadataStream(), a.packetStream = new H.TransportPacketStream(), a.parseStream = new H.TransportParseStream(), a.elementaryStream = new H.ElementaryStream(), a.timestampRolloverStream = new H.TimestampRolloverStream(), a.adtsStream = new ti(), a.h264Stream = new ua(), a.captionStream = new H.CaptionStream(e), a.coalesceStream = new te(e, a.metadataStream), a.headOfPipeline = a.packetStream, a.packetStream.pipe(a.parseStream).pipe(a.elementaryStream).pipe(a.timestampRolloverStream), a.timestampRolloverStream.pipe(a.h264Stream), a.timestampRolloverStream.pipe(a.adtsStream), a.timestampRolloverStream.pipe(a.metadataStream).pipe(a.coalesceStream), a.h264Stream.pipe(a.captionStream).pipe(a.coalesceStream), a.elementaryStream.on("data", function(o) {
       var u;
       if (o.type === "metadata") {
         for (u = o.tracks.length; u--; )
           !r && o.tracks[u].type === "video" ? (r = o.tracks[u], r.timelineStartInfo.baseMediaDecodeTime = t.baseMediaDecodeTime) : !n && o.tracks[u].type === "audio" && (n = o.tracks[u], n.timelineStartInfo.baseMediaDecodeTime = t.baseMediaDecodeTime);
-        r && !a.videoSegmentStream && (a.coalesceStream.numberOfTracks++, a.videoSegmentStream = new Te(r, e), a.videoSegmentStream.on("log", t.getLogTrigger_("videoSegmentStream")), a.videoSegmentStream.on("timelineStartInfo", function(f) {
+        r && !a.videoSegmentStream && (a.coalesceStream.numberOfTracks++, a.videoSegmentStream = new be(r, e), a.videoSegmentStream.on("log", t.getLogTrigger_("videoSegmentStream")), a.videoSegmentStream.on("timelineStartInfo", function(f) {
           n && !e.keepOriginalTimestamps && (n.timelineStartInfo = f, a.audioSegmentStream.setEarliestDts(f.dts - t.baseMediaDecodeTime));
         }), a.videoSegmentStream.on("processedGopsInfo", t.trigger.bind(t, "gopInfo")), a.videoSegmentStream.on("segmentTimingInfo", t.trigger.bind(t, "videoSegmentTimingInfo")), a.videoSegmentStream.on("baseMediaDecodeTime", function(f) {
           n && a.audioSegmentStream.setVideoBaseMediaDecodeTime(f);
-        }), a.videoSegmentStream.on("timingInfo", t.trigger.bind(t, "videoTimingInfo")), a.h264Stream.pipe(a.videoSegmentStream).pipe(a.coalesceStream)), n && !a.audioSegmentStream && (a.coalesceStream.numberOfTracks++, a.audioSegmentStream = new ae(n, e), a.audioSegmentStream.on("log", t.getLogTrigger_("audioSegmentStream")), a.audioSegmentStream.on("timingInfo", t.trigger.bind(t, "audioTimingInfo")), a.audioSegmentStream.on("segmentTimingInfo", t.trigger.bind(t, "audioSegmentTimingInfo")), a.adtsStream.pipe(a.audioSegmentStream).pipe(a.coalesceStream)), t.trigger("trackinfo", {
+        }), a.videoSegmentStream.on("timingInfo", t.trigger.bind(t, "videoTimingInfo")), a.h264Stream.pipe(a.videoSegmentStream).pipe(a.coalesceStream)), n && !a.audioSegmentStream && (a.coalesceStream.numberOfTracks++, a.audioSegmentStream = new se(n, e), a.audioSegmentStream.on("log", t.getLogTrigger_("audioSegmentStream")), a.audioSegmentStream.on("timingInfo", t.trigger.bind(t, "audioTimingInfo")), a.audioSegmentStream.on("segmentTimingInfo", t.trigger.bind(t, "audioSegmentTimingInfo")), a.adtsStream.pipe(a.audioSegmentStream).pipe(a.coalesceStream)), t.trigger("trackinfo", {
           hasAudio: !!n,
           hasVideo: !!r
         });
@@ -3027,7 +3027,7 @@ ze = function(e) {
     }), a.coalesceStream.on("caption", this.trigger.bind(this, "caption")), a.coalesceStream.on("done", this.trigger.bind(this, "done")), ii(this, a);
   }, this.setBaseMediaDecodeTime = function(a) {
     var o = this.transmuxPipeline_;
-    e.keepOriginalTimestamps || (this.baseMediaDecodeTime = a), n && (n.timelineStartInfo.dts = void 0, n.timelineStartInfo.pts = void 0, V.clearDtsInfo(n), o.audioTimestampRolloverStream && o.audioTimestampRolloverStream.discontinuity()), r && (o.videoSegmentStream && (o.videoSegmentStream.gopCache_ = []), r.timelineStartInfo.dts = void 0, r.timelineStartInfo.pts = void 0, V.clearDtsInfo(r), o.captionStream.reset()), o.timestampRolloverStream && o.timestampRolloverStream.discontinuity();
+    e.keepOriginalTimestamps || (this.baseMediaDecodeTime = a), n && (n.timelineStartInfo.dts = void 0, n.timelineStartInfo.pts = void 0, z.clearDtsInfo(n), o.audioTimestampRolloverStream && o.audioTimestampRolloverStream.discontinuity()), r && (o.videoSegmentStream && (o.videoSegmentStream.gopCache_ = []), r.timelineStartInfo.dts = void 0, r.timelineStartInfo.pts = void 0, z.clearDtsInfo(r), o.captionStream.reset()), o.timestampRolloverStream && o.timestampRolloverStream.discontinuity();
   }, this.setAudioAppendStart = function(a) {
     n && this.transmuxPipeline_.audioSegmentStream.setAudioAppendStart(a);
   }, this.setRemux = function(a) {
@@ -3056,12 +3056,12 @@ ze = function(e) {
     this.transmuxPipeline_.captionStream && this.transmuxPipeline_.captionStream.reset();
   };
 };
-ze.prototype = new it();
-var ht = {
-  Transmuxer: ze,
-  VideoSegmentStream: Te,
-  AudioSegmentStream: ae
-}, pa = or.discardEmulationPreventionBytes, ma = ur.CaptionStream, he = Ot, ca = Rt, ga = Mt, xa = Lt, ni = Xi, ya = function(e, t) {
+Ge.prototype = new rt();
+var pt = {
+  Transmuxer: Ge,
+  VideoSegmentStream: be,
+  AudioSegmentStream: se
+}, pa = or.discardEmulationPreventionBytes, ma = ur.CaptionStream, pe = Lt, ca = Nt, ga = Rt, xa = Mt, ni = Xi, ya = function(e, t) {
   for (var i = e, r = 0; r < t.length; r++) {
     var n = t[r];
     if (i < n.size)
@@ -3109,7 +3109,7 @@ var ht = {
     }), u = u.concat(d);
   }), u;
 }, Ta = function(e, t) {
-  var i = he(e, ["moof", "traf"]), r = he(e, ["mdat"]), n = {}, a = [];
+  var i = pe(e, ["moof", "traf"]), r = pe(e, ["mdat"]), n = {}, a = [];
   return r.forEach(function(o, u) {
     var f = i[u];
     a.push({
@@ -3117,11 +3117,11 @@ var ht = {
       traf: f
     });
   }), a.forEach(function(o) {
-    var u = o.mdat, f = o.traf, l = he(f, ["tfhd"]), d = xa(l[0]), h = d.trackId, m = he(f, ["tfdt"]), p = m.length > 0 ? ca(m[0]).baseMediaDecodeTime : 0, c = he(f, ["trun"]), g, T;
-    t === h && c.length > 0 && (g = Sa(c, p, d), T = va(u, g, h), n[h] || (n[h] = {
+    var u = o.mdat, f = o.traf, l = pe(f, ["tfhd"]), d = xa(l[0]), h = d.trackId, m = pe(f, ["tfdt"]), p = m.length > 0 ? ca(m[0]).baseMediaDecodeTime : 0, c = pe(f, ["trun"]), g, b;
+    t === h && c.length > 0 && (g = Sa(c, p, d), b = va(u, g, h), n[h] || (n[h] = {
       seiNals: [],
       logs: []
-    }), n[h].seiNals = n[h].seiNals.concat(T.seiNals), n[h].logs = n[h].logs.concat(T.logs));
+    }), n[h].seiNals = n[h].seiNals.concat(b.seiNals), n[h].logs = n[h].logs.concat(b.logs));
   }), n;
 }, ba = function(e, t, i) {
   var r;
@@ -3192,35 +3192,35 @@ var ht = {
     }, this.resetCaptionStream();
   }, this.reset();
 }, _a = wa, Fa = {
-  generator: Xe,
+  generator: Ke,
   probe: pn,
-  Transmuxer: ht.Transmuxer,
-  AudioSegmentStream: ht.AudioSegmentStream,
-  VideoSegmentStream: ht.VideoSegmentStream,
+  Transmuxer: pt.Transmuxer,
+  AudioSegmentStream: pt.AudioSegmentStream,
+  VideoSegmentStream: pt.VideoSegmentStream,
   CaptionParser: _a
-}, S;
-S = function(e, t) {
+}, T;
+T = function(e, t) {
   var i = 0, r = 16384, n = function(d, h) {
     var m, p = d.position + h;
     p < d.bytes.byteLength || (m = new Uint8Array(p * 2), m.set(d.bytes.subarray(0, d.position), 0), d.bytes = m, d.view = new DataView(d.bytes.buffer));
-  }, a = S.widthBytes || new Uint8Array(5), o = S.heightBytes || new Uint8Array(6), u = S.videocodecidBytes || new Uint8Array(12), f;
-  if (!S.widthBytes) {
+  }, a = T.widthBytes || new Uint8Array(5), o = T.heightBytes || new Uint8Array(6), u = T.videocodecidBytes || new Uint8Array(12), f;
+  if (!T.widthBytes) {
     for (f = 0; f < 5; f++)
       a[f] = "width".charCodeAt(f);
     for (f = 0; f < 6; f++)
       o[f] = "height".charCodeAt(f);
     for (f = 0; f < 12; f++)
       u[f] = "videocodecid".charCodeAt(f);
-    S.widthBytes = a, S.heightBytes = o, S.videocodecidBytes = u;
+    T.widthBytes = a, T.heightBytes = o, T.videocodecidBytes = u;
   }
   switch (this.keyFrame = !1, e) {
-    case S.VIDEO_TAG:
+    case T.VIDEO_TAG:
       this.length = 16, r *= 6;
       break;
-    case S.AUDIO_TAG:
+    case T.AUDIO_TAG:
       this.length = 13, this.keyFrame = !0;
       break;
-    case S.METADATA_TAG:
+    case T.METADATA_TAG:
       this.length = 29, this.keyFrame = !0;
       break;
     default:
@@ -3264,39 +3264,39 @@ S = function(e, t) {
   }, this.finalize = function() {
     var l, d;
     switch (this.bytes[0]) {
-      case S.VIDEO_TAG:
+      case T.VIDEO_TAG:
         this.bytes[11] = (this.keyFrame || t ? 16 : 32) | 7, this.bytes[12] = t ? 0 : 1, l = this.pts - this.dts, this.bytes[13] = (l & 16711680) >>> 16, this.bytes[14] = (l & 65280) >>> 8, this.bytes[15] = (l & 255) >>> 0;
         break;
-      case S.AUDIO_TAG:
+      case T.AUDIO_TAG:
         this.bytes[11] = 175, this.bytes[12] = t ? 0 : 1;
         break;
-      case S.METADATA_TAG:
+      case T.METADATA_TAG:
         this.position = 11, this.view.setUint8(this.position, 2), this.position++, this.view.setUint16(this.position, 10), this.position += 2, this.bytes.set([111, 110, 77, 101, 116, 97, 68, 97, 116, 97], this.position), this.position += 10, this.bytes[this.position] = 8, this.position++, this.view.setUint32(this.position, i), this.position = this.length, this.bytes.set([0, 0, 9], this.position), this.position += 3, this.length = this.position;
         break;
     }
-    return d = this.length - 11, this.bytes[1] = (d & 16711680) >>> 16, this.bytes[2] = (d & 65280) >>> 8, this.bytes[3] = (d & 255) >>> 0, this.bytes[4] = (this.dts & 16711680) >>> 16, this.bytes[5] = (this.dts & 65280) >>> 8, this.bytes[6] = (this.dts & 255) >>> 0, this.bytes[7] = (this.dts & 4278190080) >>> 24, this.bytes[8] = 0, this.bytes[9] = 0, this.bytes[10] = 0, n(this, 4), this.view.setUint32(this.length, this.length), this.length += 4, this.position += 4, this.bytes = this.bytes.subarray(0, this.length), this.frameTime = S.frameTime(this.bytes), this;
+    return d = this.length - 11, this.bytes[1] = (d & 16711680) >>> 16, this.bytes[2] = (d & 65280) >>> 8, this.bytes[3] = (d & 255) >>> 0, this.bytes[4] = (this.dts & 16711680) >>> 16, this.bytes[5] = (this.dts & 65280) >>> 8, this.bytes[6] = (this.dts & 255) >>> 0, this.bytes[7] = (this.dts & 4278190080) >>> 24, this.bytes[8] = 0, this.bytes[9] = 0, this.bytes[10] = 0, n(this, 4), this.view.setUint32(this.length, this.length), this.length += 4, this.position += 4, this.bytes = this.bytes.subarray(0, this.length), this.frameTime = T.frameTime(this.bytes), this;
   };
 };
-S.AUDIO_TAG = 8;
-S.VIDEO_TAG = 9;
-S.METADATA_TAG = 18;
-S.isAudioFrame = function(s) {
-  return S.AUDIO_TAG === s[0];
+T.AUDIO_TAG = 8;
+T.VIDEO_TAG = 9;
+T.METADATA_TAG = 18;
+T.isAudioFrame = function(s) {
+  return T.AUDIO_TAG === s[0];
 };
-S.isVideoFrame = function(s) {
-  return S.VIDEO_TAG === s[0];
+T.isVideoFrame = function(s) {
+  return T.VIDEO_TAG === s[0];
 };
-S.isMetaData = function(s) {
-  return S.METADATA_TAG === s[0];
+T.isMetaData = function(s) {
+  return T.METADATA_TAG === s[0];
 };
-S.isKeyFrame = function(s) {
-  return S.isVideoFrame(s) ? s[11] === 23 : !!(S.isAudioFrame(s) || S.isMetaData(s));
+T.isKeyFrame = function(s) {
+  return T.isVideoFrame(s) ? s[11] === 23 : !!(T.isAudioFrame(s) || T.isMetaData(s));
 };
-S.frameTime = function(s) {
+T.frameTime = function(s) {
   var e = s[4] << 16;
   return e |= s[5] << 8, e |= s[6] << 0, e |= s[7] << 24, e;
 };
-var Vt = S, Aa = M, $t = function s(e) {
+var $t = T, Aa = M, zt = function s(e) {
   this.numberOfTracks = 0, this.metadataStream = e.metadataStream, this.videoTags = [], this.audioTags = [], this.videoTrack = null, this.audioTrack = null, this.pendingCaptions = [], this.pendingMetadata = [], this.pendingTracks = 0, this.processedTracks = 0, s.prototype.init.call(this), this.push = function(t) {
     if (t.text)
       return this.pendingCaptions.push(t);
@@ -3305,8 +3305,8 @@ var Vt = S, Aa = M, $t = function s(e) {
     t.track.type === "video" && (this.videoTrack = t.track, this.videoTags = t.tags, this.pendingTracks++), t.track.type === "audio" && (this.audioTrack = t.track, this.audioTags = t.tags, this.pendingTracks++);
   };
 };
-$t.prototype = new Aa();
-$t.prototype.flush = function(s) {
+zt.prototype = new Aa();
+zt.prototype.flush = function(s) {
   var e, t, i, r, n = {
     tags: {},
     captions: [],
@@ -3327,7 +3327,7 @@ $t.prototype.flush = function(s) {
     n.metadata.dispatchType = this.metadataStream.dispatchType, this.videoTrack = null, this.audioTrack = null, this.videoTags = [], this.audioTags = [], this.pendingCaptions.length = 0, this.pendingMetadata.length = 0, this.pendingTracks = 0, this.processedTracks = 0, this.trigger("data", n), this.trigger("done");
   }
 };
-var Da = $t, Ua = function() {
+var Da = zt, Ua = function() {
   var e = this;
   this.list = [], this.push = function(t) {
     this.list.push({
@@ -3342,8 +3342,8 @@ var Da = $t, Ua = function() {
       return e.list.length;
     }
   });
-}, Pa = Ua, zt = M, k = Vt, X = et, Ca = qe, Ia = It.H264Stream, Ea = Da, vr = Pa, Ge, We, He, Gt, Sr, Tr;
-Gt = function(e, t) {
+}, Pa = Ua, Gt = M, k = $t, j = tt, Ca = Xe, Ia = Et.H264Stream, Ea = Da, vr = Pa, We, He, Ye, Wt, Sr, Tr;
+Wt = function(e, t) {
   typeof t.pts == "number" && (e.timelineStartInfo.pts === void 0 ? e.timelineStartInfo.pts = t.pts : e.timelineStartInfo.pts = Math.min(e.timelineStartInfo.pts, t.pts)), typeof t.dts == "number" && (e.timelineStartInfo.dts === void 0 ? e.timelineStartInfo.dts = t.dts : e.timelineStartInfo.dts = Math.min(e.timelineStartInfo.dts, t.dts));
 };
 Sr = function(e, t) {
@@ -3356,10 +3356,10 @@ Tr = function(e, t) {
     r.writeShort(e.pps[i].length), r.writeBytes(e.pps[i]);
   return r;
 };
-He = function(e) {
+Ye = function(e) {
   var t = [], i = [], r;
-  He.prototype.init.call(this), this.push = function(n) {
-    Gt(e, n), e && (e.audioobjecttype = n.audioobjecttype, e.channelcount = n.channelcount, e.samplerate = n.samplerate, e.samplingfrequencyindex = n.samplingfrequencyindex, e.samplesize = n.samplesize, e.extraData = e.audioobjecttype << 11 | e.samplingfrequencyindex << 7 | e.channelcount << 3), n.pts = Math.round(n.pts / 90), n.dts = Math.round(n.dts / 90), t.push(n);
+  Ye.prototype.init.call(this), this.push = function(n) {
+    Wt(e, n), e && (e.audioobjecttype = n.audioobjecttype, e.channelcount = n.channelcount, e.samplerate = n.samplerate, e.samplingfrequencyindex = n.samplingfrequencyindex, e.samplesize = n.samplesize, e.extraData = e.audioobjecttype << 11 | e.samplingfrequencyindex << 7 | e.channelcount << 3), n.pts = Math.round(n.pts / 90), n.dts = Math.round(n.dts / 90), t.push(n);
   }, this.flush = function() {
     var n, a, o, u = new vr();
     if (t.length === 0) {
@@ -3379,10 +3379,10 @@ He = function(e) {
     i.push(n);
   };
 };
-He.prototype = new zt();
-We = function(e) {
+Ye.prototype = new Gt();
+He = function(e) {
   var t = [], i, r;
-  We.prototype.init.call(this), this.finishFrame = function(n, a) {
+  He.prototype.init.call(this), this.finishFrame = function(n, a) {
     if (a) {
       if (i && e && e.newMetadata && (a.keyFrame || n.length === 0)) {
         var o = Sr(i, a.dts).finalize(), u = Tr(e, a.dts).finalize();
@@ -3391,7 +3391,7 @@ We = function(e) {
       a.endNalUnit(), n.push(a.finalize()), r = null;
     }
   }, this.push = function(n) {
-    Gt(e, n), n.pts = Math.round(n.pts / 90), n.dts = Math.round(n.dts / 90), t.push(n);
+    Wt(e, n), n.pts = Math.round(n.pts / 90), n.dts = Math.round(n.dts / 90), t.push(n);
   }, this.flush = function() {
     for (var n, a = new vr(); t.length && t[0].nalUnitType !== "access_unit_delimiter_rbsp"; )
       t.shift();
@@ -3407,15 +3407,15 @@ We = function(e) {
     }), this.trigger("done", "VideoSegmentStream");
   };
 };
-We.prototype = new zt();
-Ge = function(e) {
+He.prototype = new Gt();
+We = function(e) {
   var t = this, i, r, n, a, o, u, f, l, d, h, m, p;
-  Ge.prototype.init.call(this), e = e || {}, this.metadataStream = new X.MetadataStream(), e.metadataStream = this.metadataStream, i = new X.TransportPacketStream(), r = new X.TransportParseStream(), n = new X.ElementaryStream(), a = new X.TimestampRolloverStream("video"), o = new X.TimestampRolloverStream("audio"), u = new X.TimestampRolloverStream("timed-metadata"), f = new Ca(), l = new Ia(), p = new Ea(e), i.pipe(r).pipe(n), n.pipe(a).pipe(l), n.pipe(o).pipe(f), n.pipe(u).pipe(this.metadataStream).pipe(p), m = new X.CaptionStream(e), l.pipe(m).pipe(p), n.on("data", function(c) {
-    var g, T, F;
+  We.prototype.init.call(this), e = e || {}, this.metadataStream = new j.MetadataStream(), e.metadataStream = this.metadataStream, i = new j.TransportPacketStream(), r = new j.TransportParseStream(), n = new j.ElementaryStream(), a = new j.TimestampRolloverStream("video"), o = new j.TimestampRolloverStream("audio"), u = new j.TimestampRolloverStream("timed-metadata"), f = new Ca(), l = new Ia(), p = new Ea(e), i.pipe(r).pipe(n), n.pipe(a).pipe(l), n.pipe(o).pipe(f), n.pipe(u).pipe(this.metadataStream).pipe(p), m = new j.CaptionStream(e), l.pipe(m).pipe(p), n.on("data", function(c) {
+    var g, b, D;
     if (c.type === "metadata") {
       for (g = c.tracks.length; g--; )
-        c.tracks[g].type === "video" ? T = c.tracks[g] : c.tracks[g].type === "audio" && (F = c.tracks[g]);
-      T && !d && (p.numberOfTracks++, d = new We(T), l.pipe(d).pipe(p)), F && !h && (p.numberOfTracks++, h = new He(F), f.pipe(h).pipe(p), d && d.on("keyframe", h.onVideoKeyFrame));
+        c.tracks[g].type === "video" ? b = c.tracks[g] : c.tracks[g].type === "audio" && (D = c.tracks[g]);
+      b && !d && (p.numberOfTracks++, d = new He(b), l.pipe(d).pipe(p)), D && !h && (p.numberOfTracks++, h = new Ye(D), f.pipe(h).pipe(p), d && d.on("keyframe", h.onVideoKeyFrame));
     }
   }), this.push = function(c) {
     i.push(c);
@@ -3429,18 +3429,18 @@ Ge = function(e) {
     t.trigger("done");
   });
 };
-Ge.prototype = new zt();
-var Oa = Ge, ai = Vt, La = function(e, t, i) {
+We.prototype = new Gt();
+var Oa = We, ai = $t, La = function(e, t, i) {
   var r = new Uint8Array(9), n = new DataView(r.buffer), a, o, u;
   return e = e || 0, t = t === void 0 ? !0 : t, i = i === void 0 ? !0 : i, n.setUint8(0, 70), n.setUint8(1, 76), n.setUint8(2, 86), n.setUint8(3, 1), n.setUint8(4, (t ? 4 : 0) | (i ? 1 : 0)), n.setUint32(5, r.byteLength), e <= 0 ? (o = new Uint8Array(r.byteLength + 4), o.set(r), o.set([0, 0, 0, 0], r.byteLength), o) : (a = new ai(ai.METADATA_TAG), a.pts = a.dts = 0, a.writeMetaDataDouble("duration", e), u = a.finalize().length, o = new Uint8Array(r.byteLength + u), o.set(r), o.set(n.byteLength, u), o);
 }, Ma = La, Ra = {
-  tag: Vt,
+  tag: $t,
   Transmuxer: Oa,
   getFlvHeader: Ma
-}, Na = et, ka = M, pt = Xe, Pe = ar, Ce = je, Ba = j.ONE_SECOND_IN_TS, Va = mr, br = function s(e, t) {
+}, Na = tt, ka = M, mt = Ke, Ce = ar, Ie = Ze, Ba = J.ONE_SECOND_IN_TS, Va = mr, br = function s(e, t) {
   var i = [], r = 0, n = 0, a = 0, o = 1 / 0, u = null, f = null;
   t = t || {}, s.prototype.init.call(this), this.push = function(l) {
-    Ce.collectDtsInfo(e, l), e && Va.forEach(function(d) {
+    Ie.collectDtsInfo(e, l), e && Va.forEach(function(d) {
       e[d] = l[d];
     }), i.push(l);
   }, this.setEarliestDts = function(l) {
@@ -3451,7 +3451,7 @@ var Oa = Ge, ai = Vt, La = function(e, t, i) {
     a = l;
   }, this.processFrames_ = function() {
     var l, d, h, m, p;
-    i.length !== 0 && (l = Pe.trimAdtsFramesByEarliestDts(i, e, n), l.length !== 0 && (e.baseMediaDecodeTime = Ce.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps), Pe.prefixWithSilence(e, l, a, o), e.samples = Pe.generateSampleTable(l), h = pt.mdat(Pe.concatenateFrameData(l)), i = [], d = pt.moof(r, [e]), r++, e.initSegment = pt.initSegment([e]), m = new Uint8Array(d.byteLength + h.byteLength), m.set(d), m.set(h, d.byteLength), Ce.clearDtsInfo(e), u === null && (f = u = l[0].pts), f += l.length * (Ba * 1024 / e.samplerate), p = {
+    i.length !== 0 && (l = Ce.trimAdtsFramesByEarliestDts(i, e, n), l.length !== 0 && (e.baseMediaDecodeTime = Ie.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps), Ce.prefixWithSilence(e, l, a, o), e.samples = Ce.generateSampleTable(l), h = mt.mdat(Ce.concatenateFrameData(l)), i = [], d = mt.moof(r, [e]), r++, e.initSegment = mt.initSegment([e]), m = new Uint8Array(d.byteLength + h.byteLength), m.set(d), m.set(h, d.byteLength), Ie.clearDtsInfo(e), u === null && (f = u = l[0].pts), f += l.length * (Ba * 1024 / e.samplerate), p = {
       start: u
     }, this.trigger("timingInfo", p), this.trigger("data", {
       track: e,
@@ -3467,16 +3467,16 @@ var Oa = Ge, ai = Vt, La = function(e, t, i) {
   }, this.endTimeline = function() {
     this.flush(), this.trigger("endedtimeline", "AudioSegmentStream");
   }, this.resetTiming_ = function() {
-    Ce.clearDtsInfo(e), u = null, f = null;
+    Ie.clearDtsInfo(e), u = null, f = null;
   }, this.reset = function() {
     this.resetTiming_(), i = [], this.trigger("reset");
   };
 };
 br.prototype = new ka();
-var $a = br, za = M, mt = Xe, Ie = je, pe = nr, Ga = cr, wr = function s(e, t) {
+var $a = br, za = M, ct = Ke, Ee = Ze, me = nr, Ga = cr, wr = function s(e, t) {
   var i = 0, r = [], n = [], a, o, u = null, f = null, l, d = !0;
   t = t || {}, s.prototype.init.call(this), this.push = function(h) {
-    Ie.collectDtsInfo(e, h), typeof e.timelineStartInfo.dts > "u" && (e.timelineStartInfo.dts = h.dts), h.nalUnitType === "seq_parameter_set_rbsp" && !a && (a = h.config, e.sps = [h.data], Ga.forEach(function(m) {
+    Ee.collectDtsInfo(e, h), typeof e.timelineStartInfo.dts > "u" && (e.timelineStartInfo.dts = h.dts), h.nalUnitType === "seq_parameter_set_rbsp" && !a && (a = h.config, e.sps = [h.data], Ga.forEach(function(m) {
       e[m] = a[m];
     }, this)), h.nalUnitType === "pic_parameter_set_rbsp" && !o && (o = h.data, e.pps = [h.data]), r.push(h);
   }, this.processNals_ = function(h) {
@@ -3484,15 +3484,15 @@ var $a = br, za = M, mt = Xe, Ie = je, pe = nr, Ga = cr, wr = function s(e, t) {
     for (r = n.concat(r); r.length && r[0].nalUnitType !== "access_unit_delimiter_rbsp"; )
       r.shift();
     if (r.length !== 0) {
-      var p = pe.groupNalsIntoFrames(r);
+      var p = me.groupNalsIntoFrames(r);
       if (p.length) {
         if (n = p[p.length - 1], h && (p.pop(), p.duration -= n.duration, p.nalCount -= n.length, p.byteLength -= n.byteLength), !p.length) {
           r = [];
           return;
         }
         if (this.trigger("timelineStartInfo", e.timelineStartInfo), d) {
-          if (l = pe.groupFramesIntoGops(p), !l[0][0].keyFrame) {
-            if (l = pe.extendFirstKeyFrame(l), !l[0][0].keyFrame) {
+          if (l = me.groupFramesIntoGops(p), !l[0][0].keyFrame) {
+            if (l = me.extendFirstKeyFrame(l), !l[0][0].keyFrame) {
               r = [].concat.apply([], p).concat(n), n = [];
               return;
             }
@@ -3505,15 +3505,15 @@ var $a = br, za = M, mt = Xe, Ie = je, pe = nr, Ga = cr, wr = function s(e, t) {
           end: f
         }), m = 0; m < p.length; m++) {
           var c = p[m];
-          e.samples = pe.generateSampleTableForFrame(c);
-          var g = mt.mdat(pe.concatenateNalDataForFrame(c));
-          Ie.clearDtsInfo(e), Ie.collectDtsInfo(e, c), e.baseMediaDecodeTime = Ie.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps);
-          var T = mt.moof(i, [e]);
-          i++, e.initSegment = mt.initSegment([e]);
-          var F = new Uint8Array(T.byteLength + g.byteLength);
-          F.set(T), F.set(g, T.byteLength), this.trigger("data", {
+          e.samples = me.generateSampleTableForFrame(c);
+          var g = ct.mdat(me.concatenateNalDataForFrame(c));
+          Ee.clearDtsInfo(e), Ee.collectDtsInfo(e, c), e.baseMediaDecodeTime = Ee.calculateTrackBaseMediaDecodeTime(e, t.keepOriginalTimestamps);
+          var b = ct.moof(i, [e]);
+          i++, e.initSegment = ct.initSegment([e]);
+          var D = new Uint8Array(b.byteLength + g.byteLength);
+          D.set(b), D.set(g, b.byteLength), this.trigger("data", {
             track: e,
-            boxes: F,
+            boxes: D,
             sequence: i,
             videoFrameDts: c.dts,
             videoFramePts: c.pts
@@ -3535,7 +3535,7 @@ var $a = br, za = M, mt = Xe, Ie = je, pe = nr, Ga = cr, wr = function s(e, t) {
   };
 };
 wr.prototype = new za();
-var Wa = wr, _r = M, W = et, si = vi, Fr = $a, Ha = Wa, oi = je, Ya = tt.isLikelyAacData, qa = qe, Xa = pr, _t = j, Ar = function(e) {
+var Wa = wr, _r = M, Y = tt, si = vi, Fr = $a, Ha = Wa, oi = Ze, Ya = it.isLikelyAacData, qa = Xe, Xa = pr, Ft = J, Ar = function(e) {
   return e.prototype = new _r(), e.prototype.init.call(e), e;
 }, Ka = function(e) {
   var t = {
@@ -3544,14 +3544,14 @@ var Wa = wr, _r = M, W = et, si = vi, Fr = $a, Ha = Wa, oi = je, Ya = tt.isLikel
       audio: null,
       video: null
     },
-    packet: new W.TransportPacketStream(),
-    parse: new W.TransportParseStream(),
-    elementary: new W.ElementaryStream(),
-    timestampRollover: new W.TimestampRolloverStream(),
+    packet: new Y.TransportPacketStream(),
+    parse: new Y.TransportParseStream(),
+    elementary: new Y.ElementaryStream(),
+    timestampRollover: new Y.TimestampRolloverStream(),
     adts: new si.Adts(),
     h264: new si.h264.H264Stream(),
-    captionStream: new W.CaptionStream(e),
-    metadataStream: new W.MetadataStream()
+    captionStream: new Y.CaptionStream(e),
+    metadataStream: new Y.MetadataStream()
   };
   return t.headOfPipeline = t.packet, t.packet.pipe(t.parse).pipe(t.elementary).pipe(t.timestampRollover), t.timestampRollover.pipe(t.h264), t.h264.pipe(t.captionStream), t.timestampRollover.pipe(t.metadataStream), t.timestampRollover.pipe(t.adts), t.elementary.on("data", function(i) {
     if (i.type === "metadata") {
@@ -3576,7 +3576,7 @@ var Wa = wr, _r = M, W = et, si = vi, Fr = $a, Ha = Wa, oi = je, Ya = tt.isLikel
     }
   }), t.captionStream.on("data", function(i) {
     var r;
-    t.tracks.video ? r = t.tracks.video.timelineStartInfo.pts || 0 : r = 0, i.startTime = _t.metadataTsToSeconds(i.startPts, r, e.keepOriginalTimestamps), i.endTime = _t.metadataTsToSeconds(i.endPts, r, e.keepOriginalTimestamps), t.trigger("caption", i);
+    t.tracks.video ? r = t.tracks.video.timelineStartInfo.pts || 0 : r = 0, i.startTime = Ft.metadataTsToSeconds(i.startPts, r, e.keepOriginalTimestamps), i.endTime = Ft.metadataTsToSeconds(i.endPts, r, e.keepOriginalTimestamps), t.trigger("caption", i);
   }), t = Ar(t), t.metadataStream.on("data", t.trigger.bind(t, "id3Frame")), t;
 }, ja = function(e) {
   var t = {
@@ -3584,10 +3584,10 @@ var Wa = wr, _r = M, W = et, si = vi, Fr = $a, Ha = Wa, oi = je, Ya = tt.isLikel
     tracks: {
       audio: null
     },
-    metadataStream: new W.MetadataStream(),
+    metadataStream: new Y.MetadataStream(),
     aacStream: new Xa(),
-    audioRollover: new W.TimestampRolloverStream("audio"),
-    timedMetadataRollover: new W.TimestampRolloverStream("timed-metadata"),
+    audioRollover: new Y.TimestampRolloverStream("audio"),
+    timedMetadataRollover: new Y.TimestampRolloverStream("timed-metadata"),
     adtsStream: new qa(!0)
   };
   return t.headOfPipeline = t.aacStream, t.aacStream.pipe(t.audioRollover).pipe(t.adtsStream), t.aacStream.pipe(t.timedMetadataRollover).pipe(t.metadataStream), t.metadataStream.on("timestamp", function(i) {
@@ -3611,7 +3611,7 @@ var Wa = wr, _r = M, W = et, si = vi, Fr = $a, Ha = Wa, oi = je, Ya = tt.isLikel
   }), t = Ar(t), t.metadataStream.on("data", t.trigger.bind(t, "id3Frame")), t;
 }, ui = function(e, t) {
   e.on("data", t.trigger.bind(t, "data")), e.on("done", t.trigger.bind(t, "done")), e.on("partialdone", t.trigger.bind(t, "partialdone")), e.on("endedtimeline", t.trigger.bind(t, "endedtimeline")), e.on("audioTimingInfo", t.trigger.bind(t, "audioTimingInfo")), e.on("videoTimingInfo", t.trigger.bind(t, "videoTimingInfo")), e.on("trackinfo", t.trigger.bind(t, "trackinfo")), e.on("id3Frame", function(i) {
-    i.dispatchType = e.metadataStream.dispatchType, i.cueTime = _t.videoTsToSeconds(i.pts), t.trigger("id3Frame", i);
+    i.dispatchType = e.metadataStream.dispatchType, i.cueTime = Ft.videoTsToSeconds(i.pts), t.trigger("id3Frame", i);
   }), e.on("caption", function(i) {
     t.trigger("caption", i);
   });
@@ -3643,11 +3643,11 @@ var Wa = wr, _r = M, W = et, si = vi, Fr = $a, Ha = Wa, oi = je, Ya = tt.isLikel
 Dr.prototype = new _r();
 var Za = Dr, Ja = {
   Transmuxer: Za
-}, ct, li;
+}, gt, li;
 function Qa() {
-  if (li) return ct;
+  if (li) return gt;
   li = 1;
-  var s = se.getUint64, e = function(i) {
+  var s = oe.getUint64, e = function(i) {
     var r = new DataView(i.buffer, i.byteOffset, i.byteLength), n = {
       version: i[0],
       flags: new Uint8Array(i.subarray(1, 4)),
@@ -3668,13 +3668,13 @@ function Qa() {
       });
     return n;
   };
-  return ct = e, ct;
+  return gt = e, gt;
 }
-var Ur = se;
+var Ur = oe;
 Ur.MAX_UINT32;
-var fi = Ur.getUint64, I, Ft, N = function(e) {
+var fi = Ur.getUint64, E, At, N = function(e) {
   return new Date(e * 1e3 - 20828448e5);
-}, xe = Et, es = Ot, ts = function(e) {
+}, ye = Ot, es = Lt, ts = function(e) {
   var t = new DataView(e.buffer, e.byteOffset, e.byteLength), i = [], r, n;
   for (r = 0; r + 4 < e.length; r += n) {
     if (n = t.getUint32(r), r += 4, n <= 0) {
@@ -3706,7 +3706,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
     }
   }
   return i;
-}, K = {
+}, Z = {
   // codingname, not a first-class box type. stsd entries share the
   // same format as real boxes so the parsing infrastructure can be
   // shared
@@ -3720,7 +3720,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
       vertresolution: t.getUint16(32) + t.getUint16(34) / 16,
       frameCount: t.getUint16(40),
       depth: t.getUint16(74),
-      config: I(e.subarray(78, e.byteLength))
+      config: E(e.subarray(78, e.byteLength))
     };
   },
   avcC: function(e) {
@@ -3749,7 +3749,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
   },
   edts: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   elst: function(e) {
@@ -3794,30 +3794,30 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
   },
   ftyp: function(e) {
     for (var t = new DataView(e.buffer, e.byteOffset, e.byteLength), i = {
-      majorBrand: xe(e.subarray(0, 4)),
+      majorBrand: ye(e.subarray(0, 4)),
       minorVersion: t.getUint32(4),
       compatibleBrands: []
     }, r = 8; r < e.byteLength; )
-      i.compatibleBrands.push(xe(e.subarray(r, r + 4))), r += 4;
+      i.compatibleBrands.push(ye(e.subarray(r, r + 4))), r += 4;
     return i;
   },
   dinf: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   dref: function(e) {
     return {
       version: e[0],
       flags: new Uint8Array(e.subarray(1, 4)),
-      dataReferences: I(e.subarray(8))
+      dataReferences: E(e.subarray(8))
     };
   },
   hdlr: function(e) {
     var t = new DataView(e.buffer, e.byteOffset, e.byteLength), i = {
       version: t.getUint8(0),
       flags: new Uint8Array(e.subarray(1, 4)),
-      handlerType: xe(e.subarray(8, 12)),
+      handlerType: ye(e.subarray(8, 12)),
       name: ""
     }, r = 8;
     for (r = 24; r < e.byteLength; r++) {
@@ -3845,7 +3845,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
   },
   mdia: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   mfhd: function(e) {
@@ -3857,7 +3857,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
   },
   minf: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   // codingname, not a first-class box type. stsd entries share the
@@ -3874,21 +3874,21 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
       // 2 bytes reserved
       samplerate: t.getUint16(24) + t.getUint16(26) / 65536
     };
-    return e.byteLength > 28 && (i.streamDescriptor = I(e.subarray(28))[0]), i;
+    return e.byteLength > 28 && (i.streamDescriptor = E(e.subarray(28))[0]), i;
   },
   moof: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   moov: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   mvex: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   mvhd: function(e) {
@@ -3931,7 +3931,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
   },
   stbl: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   ctts: function(e) {
@@ -3985,7 +3985,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
     return {
       version: e[0],
       flags: new Uint8Array(e.subarray(1, 4)),
-      sampleDescriptions: I(e.subarray(8))
+      sampleDescriptions: E(e.subarray(8))
     };
   },
   stsz: function(e) {
@@ -4013,10 +4013,10 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
     return i;
   },
   styp: function(e) {
-    return K.ftyp(e);
+    return Z.ftyp(e);
   },
-  tfdt: Rt,
-  tfhd: Lt,
+  tfdt: Nt,
+  tfhd: Mt,
   tkhd: function(e) {
     var t = new DataView(e.buffer, e.byteOffset, e.byteLength), i = 4, r = {
       version: t.getUint8(0),
@@ -4026,12 +4026,12 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
   },
   traf: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   trak: function(e) {
     return {
-      boxes: I(e)
+      boxes: E(e)
     };
   },
   trex: function(e) {
@@ -4051,7 +4051,7 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
       sampleDegradationPriority: t.getUint16(22)
     };
   },
-  trun: Mt,
+  trun: Rt,
   "url ": function(e) {
     return {
       version: e[0],
@@ -4068,18 +4068,18 @@ var fi = Ur.getUint64, I, Ft, N = function(e) {
     };
   }
 };
-I = function(e) {
+E = function(e) {
   for (var t = 0, i = [], r, n, a, o, u, f = new ArrayBuffer(e.length), l = new Uint8Array(f), d = 0; d < e.length; ++d)
     l[d] = e[d];
   for (r = new DataView(f); t < e.byteLength; )
-    n = r.getUint32(t), a = xe(e.subarray(t + 4, t + 8)), o = n > 1 ? t + n : e.byteLength, u = (K[a] || function(h) {
+    n = r.getUint32(t), a = ye(e.subarray(t + 4, t + 8)), o = n > 1 ? t + n : e.byteLength, u = (Z[a] || function(h) {
       return {
         data: h
       };
     })(e.subarray(t + 8, o)), u.size = n, u.type = a, i.push(u), t = o;
   return i;
 };
-Ft = function(e, t) {
+At = function(e, t) {
   var i;
   return t = t || 0, i = new Array(t * 2 + 1).join(" "), e.map(function(r, n) {
     return i + r.type + `
@@ -4107,40 +4107,40 @@ Ft = function(e, t) {
     }).join(`
 `) + // recursively textify the child boxes
     (r.boxes ? `
-` + Ft(r.boxes, t + 1) : "");
+` + At(r.boxes, t + 1) : "");
   }).join(`
 `);
 };
 var is = {
-  inspect: I,
-  textify: Ft,
-  parseType: xe,
+  inspect: E,
+  textify: At,
+  parseType: ye,
   findBox: es,
-  parseTraf: K.traf,
-  parseTfdt: K.tfdt,
-  parseHdlr: K.hdlr,
-  parseTfhd: K.tfhd,
-  parseTrun: K.trun,
-  parseSidx: K.sidx
+  parseTraf: Z.traf,
+  parseTfdt: Z.tfdt,
+  parseHdlr: Z.hdlr,
+  parseTfhd: Z.tfhd,
+  parseTrun: Z.trun,
+  parseSidx: Z.sidx
 }, rs = {
   8: "audio",
   9: "video",
   18: "metadata"
 }, ns = function(e) {
   return "0x" + ("00" + e.toString(16)).slice(-2).toUpperCase();
-}, At = function(e) {
+}, Dt = function(e) {
   for (var t = [], i; e.byteLength > 0; )
     i = 0, t.push(ns(e[i++])), e = e.subarray(i);
   return t.join(" ");
 }, as = function(e, t) {
   var i = ["AVC Sequence Header", "AVC NALU", "AVC End-of-Sequence"], r = e[1] & parseInt("01111111", 2) << 16 | e[2] << 8 | e[3];
-  return t = t || {}, t.avcPacketType = i[e[0]], t.CompositionTime = e[1] & parseInt("10000000", 2) ? -r : r, e[0] === 1 ? t.nalUnitTypeRaw = At(e.subarray(4, 100)) : t.data = At(e.subarray(4)), t;
+  return t = t || {}, t.avcPacketType = i[e[0]], t.CompositionTime = e[1] & parseInt("10000000", 2) ? -r : r, e[0] === 1 ? t.nalUnitTypeRaw = Dt(e.subarray(4, 100)) : t.data = Dt(e.subarray(4)), t;
 }, ss = function(e, t) {
   var i = ["Unknown", "Keyframe (for AVC, a seekable frame)", "Inter frame (for AVC, a nonseekable frame)", "Disposable inter frame (H.263 only)", "Generated keyframe (reserved for server use only)", "Video info/command frame"], r = e[0] & parseInt("00001111", 2);
   return t = t || {}, t.frameType = i[(e[0] & parseInt("11110000", 2)) >>> 4], t.codecID = r, r === 7 ? as(e.subarray(1), t) : t;
 }, os = function(e, t) {
   var i = ["AAC Sequence Header", "AAC Raw"];
-  return t = t || {}, t.aacPacketType = i[e[0]], t.data = At(e.subarray(1)), t;
+  return t = t || {}, t.aacPacketType = i[e[0]], t.data = Dt(e.subarray(1)), t;
 }, us = function(e, t) {
   var i = ["Linear PCM, platform endian", "ADPCM", "MP3", "Linear PCM, little endian", "Nellymoser 16-kHz mono", "Nellymoser 8-kHz mono", "Nellymoser", "G.711 A-law logarithmic PCM", "G.711 mu-law logarithmic PCM", "reserved", "AAC", "Speex", "MP3 8-Khz", "Device-specific sound"], r = ["5.5-kHz", "11-kHz", "22-kHz", "44-kHz"], n = (e[0] & parseInt("11110000", 2)) >>> 4;
   return t = t || {}, t.soundFormat = i[n], t.soundRate = r[(e[0] & parseInt("00001100", 2)) >>> 2], t.soundSize = (e[0] & parseInt("00000010", 2)) >>> 1 ? "16-bit" : "8-bit", t.soundType = e[0] & parseInt("00000001", 2) ? "Stereo" : "Mono", n === 10 ? os(e.subarray(1), t) : t;
@@ -4173,22 +4173,22 @@ var is = {
   inspectTag: Pr,
   inspect: fs,
   textify: ds
-}, gt = Qe, Cr = function(e) {
+}, xt = et, Cr = function(e) {
   var t = e[1] & 31;
   return t <<= 8, t |= e[2], t;
-}, rt = function(e) {
-  return !!(e[1] & 64);
 }, nt = function(e) {
+  return !!(e[1] & 64);
+}, at = function(e) {
   var t = 0;
   return (e[3] & 48) >>> 4 > 1 && (t += e[4] + 1), t;
 }, ps = function(e, t) {
   var i = Cr(e);
   return i === 0 ? "pat" : i === t ? "pmt" : t ? "pes" : null;
 }, ms = function(e) {
-  var t = rt(e), i = 4 + nt(e);
+  var t = nt(e), i = 4 + at(e);
   return t && (i += e[i] + 1), (e[i + 10] & 31) << 8 | e[i + 11];
 }, cs = function(e) {
-  var t = {}, i = rt(e), r = 4 + nt(e);
+  var t = {}, i = nt(e), r = 4 + at(e);
   if (i && (r += e[r] + 1), !!(e[r + 5] & 1)) {
     var n, a, o;
     n = (e[r + 1] & 15) << 8 | e[r + 2], a = 3 + n - 4, o = (e[r + 10] & 15) << 8 | e[r + 11];
@@ -4201,25 +4201,25 @@ var is = {
 }, gs = function(e, t) {
   var i = Cr(e), r = t[i];
   switch (r) {
-    case gt.H264_STREAM_TYPE:
+    case xt.H264_STREAM_TYPE:
       return "video";
-    case gt.ADTS_STREAM_TYPE:
+    case xt.ADTS_STREAM_TYPE:
       return "audio";
-    case gt.METADATA_STREAM_TYPE:
+    case xt.METADATA_STREAM_TYPE:
       return "timed-metadata";
     default:
       return null;
   }
 }, xs = function(e) {
-  var t = rt(e);
+  var t = nt(e);
   if (!t)
     return null;
-  var i = 4 + nt(e);
+  var i = 4 + at(e);
   if (i >= e.byteLength)
     return null;
   var r = null, n;
   return n = e[i + 7], n & 192 && (r = {}, r.pts = (e[i + 9] & 14) << 27 | (e[i + 10] & 255) << 20 | (e[i + 11] & 254) << 12 | (e[i + 12] & 255) << 5 | (e[i + 13] & 254) >>> 3, r.pts *= 4, r.pts += (e[i + 13] & 6) >>> 1, r.dts = r.pts, n & 64 && (r.dts = (e[i + 14] & 14) << 27 | (e[i + 15] & 255) << 20 | (e[i + 16] & 254) << 12 | (e[i + 17] & 255) << 5 | (e[i + 18] & 254) >>> 3, r.dts *= 4, r.dts += (e[i + 18] & 6) >>> 1)), r;
-}, xt = function(e) {
+}, yt = function(e) {
   switch (e) {
     case 5:
       return "slice_layer_without_partitioning_rbsp_idr";
@@ -4235,7 +4235,7 @@ var is = {
       return null;
   }
 }, ys = function(e) {
-  for (var t = 4 + nt(e), i = e.subarray(t), r = 0, n = 0, a = !1, o; n < i.byteLength - 3; n++)
+  for (var t = 4 + at(e), i = e.subarray(t), r = 0, n = 0, a = !1, o; n < i.byteLength - 3; n++)
     if (i[n + 2] === 1) {
       r = n + 5;
       break;
@@ -4250,7 +4250,7 @@ var is = {
           r++;
           break;
         }
-        n + 3 !== r - 2 && (o = xt(i[n + 3] & 31), o === "slice_layer_without_partitioning_rbsp_idr" && (a = !0));
+        n + 3 !== r - 2 && (o = yt(i[n + 3] & 31), o === "slice_layer_without_partitioning_rbsp_idr" && (a = !0));
         do
           r++;
         while (i[r] !== 1 && r < i.length);
@@ -4261,33 +4261,33 @@ var is = {
           r += 3;
           break;
         }
-        o = xt(i[n + 3] & 31), o === "slice_layer_without_partitioning_rbsp_idr" && (a = !0), n = r - 2, r += 3;
+        o = yt(i[n + 3] & 31), o === "slice_layer_without_partitioning_rbsp_idr" && (a = !0), n = r - 2, r += 3;
         break;
       default:
         r += 3;
         break;
     }
-  return i = i.subarray(n), r -= n, n = 0, i && i.byteLength > 3 && (o = xt(i[n + 3] & 31), o === "slice_layer_without_partitioning_rbsp_idr" && (a = !0)), a;
+  return i = i.subarray(n), r -= n, n = 0, i && i.byteLength > 3 && (o = yt(i[n + 3] & 31), o === "slice_layer_without_partitioning_rbsp_idr" && (a = !0)), a;
 }, vs = {
   parseType: ps,
   parsePat: ms,
   parsePmt: cs,
-  parsePayloadUnitStartIndicator: rt,
+  parsePayloadUnitStartIndicator: nt,
   parsePesType: gs,
   parsePesTime: xs,
   videoPacketContainsKeyFrame: ys
-}, di = Qe, ie = fr.handleRollover, w = {};
-w.ts = vs;
-w.aac = tt;
-var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
+}, di = et, re = fr.handleRollover, _ = {};
+_.ts = vs;
+_.aac = it;
+var Q = J.ONE_SECOND_IN_TS, O = 188, G = 71, Ss = function(e, t) {
   for (var i = 0, r = O, n, a; r < e.byteLength; ) {
-    if (e[i] === $ && e[r] === $) {
-      switch (n = e.subarray(i, r), a = w.ts.parseType(n, t.pid), a) {
+    if (e[i] === G && e[r] === G) {
+      switch (n = e.subarray(i, r), a = _.ts.parseType(n, t.pid), a) {
         case "pat":
-          t.pid = w.ts.parsePat(n);
+          t.pid = _.ts.parsePat(n);
           break;
         case "pmt":
-          var o = w.ts.parsePmt(n);
+          var o = _.ts.parsePmt(n);
           t.table = t.table || {}, Object.keys(o).forEach(function(u) {
             t.table[u] = o[u];
           });
@@ -4300,10 +4300,10 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
   }
 }, Ir = function(e, t, i) {
   for (var r = 0, n = O, a, o, u, f, l, d = !1; n <= e.byteLength; ) {
-    if (e[r] === $ && (e[n] === $ || n === e.byteLength)) {
-      switch (a = e.subarray(r, n), o = w.ts.parseType(a, t.pid), o) {
+    if (e[r] === G && (e[n] === G || n === e.byteLength)) {
+      switch (a = e.subarray(r, n), o = _.ts.parseType(a, t.pid), o) {
         case "pes":
-          u = w.ts.parsePesType(a, t.table), f = w.ts.parsePayloadUnitStartIndicator(a), u === "audio" && f && (l = w.ts.parsePesTime(a), l && (l.type = "audio", i.audio.push(l), d = !0));
+          u = _.ts.parsePesType(a, t.table), f = _.ts.parsePayloadUnitStartIndicator(a), u === "audio" && f && (l = _.ts.parsePesTime(a), l && (l.type = "audio", i.audio.push(l), d = !0));
           break;
       }
       if (d)
@@ -4314,10 +4314,10 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
     r++, n++;
   }
   for (n = e.byteLength, r = n - O, d = !1; r >= 0; ) {
-    if (e[r] === $ && (e[n] === $ || n === e.byteLength)) {
-      switch (a = e.subarray(r, n), o = w.ts.parseType(a, t.pid), o) {
+    if (e[r] === G && (e[n] === G || n === e.byteLength)) {
+      switch (a = e.subarray(r, n), o = _.ts.parseType(a, t.pid), o) {
         case "pes":
-          u = w.ts.parsePesType(a, t.table), f = w.ts.parsePayloadUnitStartIndicator(a), u === "audio" && f && (l = w.ts.parsePesTime(a), l && (l.type = "audio", i.audio.push(l), d = !0));
+          u = _.ts.parsePesType(a, t.table), f = _.ts.parsePayloadUnitStartIndicator(a), u === "audio" && f && (l = _.ts.parsePesTime(a), l && (l.type = "audio", i.audio.push(l), d = !0));
           break;
       }
       if (d)
@@ -4332,15 +4332,15 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
     data: [],
     size: 0
   }; n < e.byteLength; ) {
-    if (e[r] === $ && e[n] === $) {
-      switch (a = e.subarray(r, n), o = w.ts.parseType(a, t.pid), o) {
+    if (e[r] === G && e[n] === G) {
+      switch (a = e.subarray(r, n), o = _.ts.parseType(a, t.pid), o) {
         case "pes":
-          if (u = w.ts.parsePesType(a, t.table), f = w.ts.parsePayloadUnitStartIndicator(a), u === "video" && (f && !p && (l = w.ts.parsePesTime(a), l && (l.type = "video", i.video.push(l), p = !0)), !i.firstKeyFrame)) {
+          if (u = _.ts.parsePesType(a, t.table), f = _.ts.parsePayloadUnitStartIndicator(a), u === "video" && (f && !p && (l = _.ts.parsePesTime(a), l && (l.type = "video", i.video.push(l), p = !0)), !i.firstKeyFrame)) {
             if (f && c.size !== 0) {
               for (d = new Uint8Array(c.size), h = 0; c.data.length; )
                 m = c.data.shift(), d.set(m, h), h += m.byteLength;
-              if (w.ts.videoPacketContainsKeyFrame(d)) {
-                var g = w.ts.parsePesTime(d);
+              if (_.ts.videoPacketContainsKeyFrame(d)) {
+                var g = _.ts.parsePesTime(d);
                 g ? (i.firstKeyFrame = g, i.firstKeyFrame.type = "video") : console.warn("Failed to extract PTS/DTS from PES at first keyframe. This could be an unusual TS segment, or else mux.js did not parse your TS segment correctly. If you know your TS segments do contain PTS/DTS on keyframes please file a bug report! You can try ffprobe to double check for yourself.");
               }
               c.size = 0;
@@ -4357,10 +4357,10 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
     r++, n++;
   }
   for (n = e.byteLength, r = n - O, p = !1; r >= 0; ) {
-    if (e[r] === $ && e[n] === $) {
-      switch (a = e.subarray(r, n), o = w.ts.parseType(a, t.pid), o) {
+    if (e[r] === G && e[n] === G) {
+      switch (a = e.subarray(r, n), o = _.ts.parseType(a, t.pid), o) {
         case "pes":
-          u = w.ts.parsePesType(a, t.table), f = w.ts.parsePayloadUnitStartIndicator(a), u === "video" && f && (l = w.ts.parsePesTime(a), l && (l.type = "video", i.video.push(l), p = !0));
+          u = _.ts.parsePesType(a, t.table), f = _.ts.parsePayloadUnitStartIndicator(a), u === "video" && f && (l = _.ts.parsePesTime(a), l && (l.type = "video", i.video.push(l), p = !0));
           break;
       }
       if (p)
@@ -4374,43 +4374,43 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
   if (e.audio && e.audio.length) {
     var i = t;
     (typeof i > "u" || isNaN(i)) && (i = e.audio[0].dts), e.audio.forEach(function(a) {
-      a.dts = ie(a.dts, i), a.pts = ie(a.pts, i), a.dtsTime = a.dts / J, a.ptsTime = a.pts / J;
+      a.dts = re(a.dts, i), a.pts = re(a.pts, i), a.dtsTime = a.dts / Q, a.ptsTime = a.pts / Q;
     });
   }
   if (e.video && e.video.length) {
     var r = t;
     if ((typeof r > "u" || isNaN(r)) && (r = e.video[0].dts), e.video.forEach(function(a) {
-      a.dts = ie(a.dts, r), a.pts = ie(a.pts, r), a.dtsTime = a.dts / J, a.ptsTime = a.pts / J;
+      a.dts = re(a.dts, r), a.pts = re(a.pts, r), a.dtsTime = a.dts / Q, a.ptsTime = a.pts / Q;
     }), e.firstKeyFrame) {
       var n = e.firstKeyFrame;
-      n.dts = ie(n.dts, r), n.pts = ie(n.pts, r), n.dtsTime = n.dts / J, n.ptsTime = n.pts / J;
+      n.dts = re(n.dts, r), n.pts = re(n.pts, r), n.dtsTime = n.dts / Q, n.ptsTime = n.pts / Q;
     }
   }
 }, ws = function(e) {
   for (var t = !1, i = 0, r = null, n = null, a = 0, o = 0, u; e.length - o >= 3; ) {
-    var f = w.aac.parseType(e, o);
+    var f = _.aac.parseType(e, o);
     switch (f) {
       case "timed-metadata":
         if (e.length - o < 10) {
           t = !0;
           break;
         }
-        if (a = w.aac.parseId3TagSize(e, o), a > e.length) {
+        if (a = _.aac.parseId3TagSize(e, o), a > e.length) {
           t = !0;
           break;
         }
-        n === null && (u = e.subarray(o, o + a), n = w.aac.parseAacTimestamp(u)), o += a;
+        n === null && (u = e.subarray(o, o + a), n = _.aac.parseAacTimestamp(u)), o += a;
         break;
       case "audio":
         if (e.length - o < 7) {
           t = !0;
           break;
         }
-        if (a = w.aac.parseAdtsSize(e, o), a > e.length) {
+        if (a = _.aac.parseAdtsSize(e, o), a > e.length) {
           t = !0;
           break;
         }
-        r === null && (u = e.subarray(o, o + a), r = w.aac.parseSampleRate(u)), i++, o += a;
+        r === null && (u = e.subarray(o, o + a), r = _.aac.parseSampleRate(u)), i++, o += a;
         break;
       default:
         o++;
@@ -4421,7 +4421,7 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
   }
   if (r === null || n === null)
     return null;
-  var l = J / r, d = {
+  var l = Q / r, d = {
     audio: [{
       type: "audio",
       dts: n,
@@ -4453,22 +4453,22 @@ var J = j.ONE_SECOND_IN_TS, O = 188, $ = 71, Ss = function(e, t) {
     }
   return i;
 }, Fs = function(e, t) {
-  var i = w.aac.isLikelyAacData(e), r;
+  var i = _.aac.isLikelyAacData(e), r;
   return i ? r = ws(e) : r = _s(e), !r || !r.audio && !r.video ? null : (bs(r, t), r);
 }, As = {
   inspect: Fs,
   parseAudioPes_: Ir
-}, at = {
+}, st = {
   codecs: vi,
   mp4: Fa,
   flv: Ra,
   mp2t: Na,
   partial: Ja
 };
-at.mp4.tools = is;
-at.flv.tools = hs;
-at.mp2t.tools = As;
-var Ds = at;
+st.mp4.tools = is;
+st.flv.tools = hs;
+st.mp2t.tools = As;
+var Ds = st;
 const Us = /* @__PURE__ */ Er(Ds);
 async function Is(s, e = {}) {
   let t = !1, i = [], r = [], n = [0], a = 0, o = [0], u = [0], f = [], l = !0, d = 0, h = "", m = null, p = e;
@@ -4493,14 +4493,14 @@ async function Is(s, e = {}) {
   !h && e.filename && (h = e.filename), e.onProgress && e.onProgress(0, 0, 0, "\u5F00\u59CB\u4E0B\u8F7DM3U8\u6587\u4EF6...");
   try {
     await c(s), t = !1;
-  } catch (D) {
-    console.error("\u4E0B\u8F7D\u5931\u8D25:", D), t = !1, e.onError && e.onError(D);
+  } catch (F) {
+    console.error("\u4E0B\u8F7D\u5931\u8D25:", F), t = !1, e.onError && e.onError(F);
   }
-  async function c(D) {
-    const v = await hi(D);
+  async function c(F) {
+    const v = await hi(F);
     if (i.length = 0, r.length = 0, n[0] = 0, o[0] = 0, u[0] = 0, f.length = 0, d = 0, v.split(`
 `).forEach((U) => {
-      /^[^#]/.test(U) && U.trim() && (i.push(Ps(U, D)), r.push({
+      /^[^#]/.test(U) && U.trim() && (i.push(Ps(U, F)), r.push({
         title: U,
         status: ""
       }));
@@ -4509,56 +4509,76 @@ async function Is(s, e = {}) {
     l && v.split(`
 `).forEach((U) => {
       U.toUpperCase().indexOf("#EXTINF:") > -1 && (d += parseFloat(U.split("#EXTINF:")[1]));
-    }), p.onProgress && p.onProgress(0, a, 0, `\u627E\u5230${a}\u4E2A\u89C6\u9891\u7247\u6BB5\uFF0C\u5F00\u59CB\u4E0B\u8F7D...`), T();
+    }), p.onProgress && p.onProgress(0, a, 0, `\u627E\u5230${a}\u4E2A\u89C6\u9891\u7247\u6BB5\uFF0C\u5F00\u59CB\u4E0B\u8F7D...`), b();
   }
   const g = () => {
-    let D = 0;
+    let F = 0;
     for (let v = 0; v < r.length; v++)
-      (r[v].status === "finish" || r[v].status === "error") && D++;
-    return console.log(`\u5DF2\u5B8C\u6210: ${D}/${a}, \u6210\u529F: ${o[0]}, \u9519\u8BEF: ${u[0]}`), D === a ? (p.onProgress && p.onProgress(a, a, u[0], "\u4E0B\u8F7D\u5B8C\u6210\uFF0C\u5F00\u59CB\u4FDD\u5B58\u6587\u4EF6..."), setTimeout(() => {
-      oe();
+      (r[v].status === "finish" || r[v].status === "error") && F++;
+    return console.log(`\u5DF2\u5B8C\u6210: ${F}/${a}, \u6210\u529F: ${o[0]}, \u9519\u8BEF: ${u[0]}`), F === a ? (p.onProgress && p.onProgress(a, a, u[0], "\u4E0B\u8F7D\u5B8C\u6210\uFF0C\u5F00\u59CB\u4FDD\u5B58\u6587\u4EF6..."), setTimeout(() => {
+      ue();
     }, 500), !0) : !1;
   };
-  function T() {
-    const D = () => {
+  function b() {
+    const F = () => {
       const v = n[0];
       if (v >= a) {
         g();
         return;
       }
-      n[0]++, r[v] && r[v].status === "" ? (r[v].status = "downloading", hi(i[v], "file").then((U) => F(U, v, D)).catch(() => {
-        u[0]++, r[v].status = "error", p.onProgress && p.onProgress(o[0], a, u[0], `\u4E0B\u8F7D\u8FDB\u5EA6: ${o[0]}/${a}, \u9519\u8BEF: ${u[0]}`), g() || D();
-      })) : D();
+      n[0]++, r[v] && r[v].status === "" ? (r[v].status = "downloading", hi(i[v], "file").then((U) => D(U, v, F)).catch(() => {
+        u[0]++, r[v].status = "error", p.onProgress && p.onProgress(o[0], a, u[0], `\u4E0B\u8F7D\u8FDB\u5EA6: ${o[0]}/${a}, \u9519\u8BEF: ${u[0]}`), g() || F();
+      })) : F();
     };
     for (let v = 0; v < Math.min(10, a); v++)
-      D();
+      F();
   }
-  async function F(D, v, U) {
+  async function D(F, v, U) {
     try {
-      const L = await z(D, v);
+      const L = await W(F, v);
       f[v] = L, r[v].status = "finish", o[0]++, p.onProgress && p.onProgress(o[0], a, u[0], `\u4E0B\u8F7D\u8FDB\u5EA6: ${o[0]}/${a}, \u9519\u8BEF: ${u[0]}`), g() || U && U();
     } catch (L) {
       console.error("\u5904\u7406TS\u7247\u6BB5\u5931\u8D25:", L), u[0]++, r[v].status = "error", g() || U && U();
     }
   }
-  function z(D, v) {
-    return new Promise((U) => {
-      const L = new Us.mp4.Transmuxer({
-        keepOriginalTimestamps: !0,
-        duration: parseInt(d)
-      });
-      L.on("data", (E) => {
-        if (v === 0) {
-          const A = new Uint8Array(E.initSegment.byteLength + E.data.byteLength);
-          A.set(E.initSegment, 0), A.set(E.data, E.initSegment.byteLength), U(A.buffer);
-        } else
-          U(E.data);
-      }), L.push(new Uint8Array(D)), L.flush();
+  function W(F, v) {
+    return new Promise((U, L) => {
+      try {
+        const I = new Worker(new URL(
+          /* @vite-ignore */
+          "" + new URL("assets/transmuxer-worker-B1VeSFP-.js", import.meta.url).href,
+          import.meta.url
+        ));
+        I.onmessage = function(S) {
+          S.data.success ? U(S.data.result) : L(new Error(S.data.error || "\u8F6C\u6362\u5931\u8D25")), I.terminate();
+        }, I.onerror = function(S) {
+          console.error("Worker\u6267\u884C\u9519\u8BEF:", S), L(new Error("\u8F6C\u6362Worker\u6267\u884C\u5931\u8D25")), I.terminate();
+        }, I.postMessage({
+          data: F,
+          index: v,
+          durationSecond: d
+        }, [F]);
+      } catch (I) {
+        console.error("\u521B\u5EFAWorker\u5931\u8D25:", I);
+        const S = new Us.mp4.Transmuxer({
+          keepOriginalTimestamps: !0,
+          duration: parseInt(d)
+        });
+        S.on("data", (B) => {
+          if (v === 0) {
+            const V = new Uint8Array(B.initSegment.byteLength + B.data.byteLength);
+            V.set(B.initSegment, 0), V.set(B.data, B.initSegment.byteLength), U(V.buffer);
+          } else
+            U(B.data);
+        }), S.on("error", (B) => {
+          L(B);
+        }), S.push(new Uint8Array(F)), S.flush();
+      }
     });
   }
-  function oe() {
-    const D = h || Cs(m, "YYYY_MM_DD hh_mm_ss"), v = new Blob(f, { type: "video/mp4" }), U = D + ".mp4", L = URL.createObjectURL(v), E = document.createElement("a");
-    E.href = L, E.download = U, document.body.appendChild(E), E.click(), document.body.removeChild(E), URL.revokeObjectURL(L), p.onSuccess && p.onSuccess({
+  function ue() {
+    const F = h || Cs(m, "YYYY_MM_DD hh_mm_ss"), v = new Blob(f, { type: "video/mp4" }), U = F + ".mp4", L = URL.createObjectURL(v), I = document.createElement("a");
+    I.href = L, I.download = U, document.body.appendChild(I), I.click(), document.body.removeChild(I), URL.revokeObjectURL(L), p.onSuccess && p.onSuccess({
       blob: v,
       filename: U,
       mimeType: "video/mp4",
