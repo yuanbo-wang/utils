@@ -58,8 +58,8 @@ export default function downloadStream(url) {
 
     const tsUrlList = []
     const finishList = []
-    const downloading = false
-    const durationSecond = 0
+    let downloading = false
+    let durationSecond = 0
 
     function downloadTs(maxAjaxNumber) {
         const currentIndex = 0
