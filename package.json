@@ -1,7 +1,15 @@
 {
   "name": "w-utils-set",
   "version": "1.0.9",
-  "homepage": "https://github.com/your-username/w-utils-set",
+   "description": "A collection of utility functions and tools for frontend development",
+  "homepage": "https://github.com/yuanbo-wang/utils",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/yuanbo-wang/utils"
+  },
+  "keywords": [
+    "m3u8"
+  ],
   "main": "./dist-lib/index.umd.js",
   "module": "./dist-lib/index.es.js",
   "files": [
@@ -21,6 +29,9 @@
   },
   "author": "w",
   "license": "ISC",
+
+
+
   "dependencies": {
     "@vueuse/core": "^14.0.0",
     "axios": "^1.3.4",
