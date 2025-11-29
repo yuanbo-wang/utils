@@ -1,1 +1,4 @@
 # 视频流下载
+downloadM3U8Optimized
+下载m3u8视频流的一个方法
+将ts片段存储到indexedDB中最后统一下载  使用webwoker转换ts片段为mp4格式 
